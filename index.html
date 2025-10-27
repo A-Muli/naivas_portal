@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naivas Brand Ambassador Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Hero Section */
+    .hero {
+      background: url("images/home-bg.jpg") no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 6rem 2rem;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .hero a {
+      padding: 1rem 2rem;
+      background: #f58220;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .hero a:hover {
+      background: #cc681a;
+    }
+
+    /* Quick Links Section */
+    .quick-links {
+      max-width: 1100px;
+      margin: 3rem auto;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      padding: 0 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h3 {
+      color: #007a33;
+      margin-bottom: 1rem;
+    }
+    .card p {
+      margin-bottom: 1.5rem;
+    }
+    .card a {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      background: #007a33;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .card a:hover {
+      background: #005d27;
+    }
+
+    /* Summary Section */
+    .summary {
+      max-width: 900px;
+      margin: 3rem auto;
+      text-align: center;
+      padding: 2rem;
+      background: #f9fafc;
+      border-radius: 12px;
+      border-left: 5px solid #007a33;
+    }
+    .summary h2 {
+      color: #f58220;
+      margin-bottom: 1rem;
+    }
+    .summary p {
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="images/logo.png" alt="Naivas Logo">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" style="color:#f58220;">Home</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to the Naivas Brand Ambassador Portal</h1>
+      <p>Book activations, manage Brand Ambassadors, and streamline your campaigns</p>
+      <a href="booking.html">Book an Activation</a>
+    </div>
+  </section>
+
+  <!-- Quick Links Section -->
+  <section class="quick-links">
+    <div class="card">
+      <h3>Categories</h3>
+      <p>View available activation types and guidelines.</p>
+      <a href="categories.html">Explore</a>
+    </div>
+    <div class="card">
+      <h3>Profile</h3>
+      <p>Update your account details, manage BAs, and track submissions.</p>
+      <a href="profile.html">Go to Profile</a>
+    </div>
+    <div class="card">
+      <h3>Support</h3>
+      <p>Need help? Reach out to our support team for assistance.</p>
+      <a href="mailto:support@naivas.co.ke">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- Activation Summary Section -->
+  <section class="summary">
+    <h2>Activation Summary</h2>
+    <p><strong>Upcoming Activations:</strong> 2</p>
+    <p><strong>Past Activations:</strong> 5</p>
+    <p><strong>Pending Approvals:</strong> 1</p>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Naivas Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #4bb300;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    header img {
+      height: 45px;
+    }
+
+    .profile-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #4bb300;
+    }
+
+    h2 {
+      color: #4bb300;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-section, .activation-section, .ba-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      color: #333;
+      border-left: 5px solid #4bb300;
+      padding-left: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .info-card {
+      background: #f2f2f2;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+
+    .btn-edit { background: #4bb300; color: white; }
+    .btn-logout { background: #ff6600; color: white; }
+    .btn-delete { background: #cc0000; color: white; }
+
+    .btn:hover { opacity: 0.85; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    table th {
+      background: #4bb300;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <img src="images/logo.png" alt="Naivas Logo">
+      <h1>Supplier Profile</h1>
+    </div>
+    <button class="btn btn-logout" id="logoutBtn">Logout</button>
+  </header>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <img id="userAvatar" src="images/avatar.png" alt="User Avatar">
+      <div>
+        <h2 id="userName">Loading...</h2>
+        <p id="userCompany">Company: --</p>
+        <p id="userEmail">Email: --</p>
+        <p id="userPhone">Phone: --</p>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3 class="section-title">Account Management</h3>
+      <button class="btn btn-edit" onclick="resetPassword()">Reset Password</button>
+      <button class="btn btn-delete" onclick="deleteProfile()">Delete Profile</button>
+    </div>
+
+    <div class="activation-section">
+      <h3 class="section-title">Activation Summary</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Store</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="activationTable">
+          <tr><td colspan="4" style="text-align:center;">No activations found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ba-section">
+      <h3 class="section-title">Brand Ambassadors</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID Number</th>
+            <th>Phone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="baTable">
+          <tr><td colspan="4" style="text-align:center;">No BAs found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Load user data from localStorage
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) {
+      alert("Please login first.");
+      window.location.href = "signin.html";
+    } else {
+      document.getElementById("userName").textContent = user.SupplierName;
+      document.getElementById("userEmail").textContent = "Email: " + user.email;
+      document.getElementById("userPhone").textContent = "Phone: " + user.PhoneNumber;
+      document.getElementById("userCompany").textContent = "Company: " + (user.CompanyName || "Not provided");
+    }
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "signin.html";
+    });
+
+    // Placeholder actions
+    function resetPassword() {
+      alert("Password reset feature coming soon!");
+    }
+
+    function deleteProfile() {
+      if (confirm("Are you sure you want to delete your profile?")) {
+        // Later: send request to backend/delete_user.php
+        alert("Profile deletion request sent.");
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Activation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: url("images/booking.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 3rem auto;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007a33;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      color: #131111;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    input:focus, select:focus {
+      border-color: #007a33;
+      outline: none;
+    }
+
+    .btn {
+      margin-top: 1.5rem;
+      background: #007a33;
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #005d27;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 1.5rem;
+      text-align: center;
+      padding: 0.8rem 1.5rem;
+      background: #f58220;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-back:hover {
+      background: #cc681a;
+    }
+  </style>
+  <header>
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="images/logo.png" alt="Naivas Logo">
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+</head>
+<body>
+
+  <div class="container">
+    <h1>Book Your Activation</h1>
+
+    <form id="bookingForm">
+      <!-- Supplier Section -->
+      <h2>Supplier Details</h2>
+      <div>
+        <label for="supplierName">Supplier Name</label>
+        <input type="text" id="supplierName" required>
+      </div>
+
+      <div>
+        <label for="companyName">Company Name</label>
+        <input type="text" id="companyName" required>
+      </div>
+
+      <div>
+        <label for="category">Activation Category</label>
+        <select id="category" required>
+          <option value="">Select Activation Category</option>
+          <option value="New Product Launch">New Product In-Store Launch</option>
+          <option value="New Product Activation">New Product Activation</option>
+          <option value="Existing Product Activation">Existing Product Activation</option>
+          <option value="Influencer Activation">Influencer In-Store Activation</option>
+          <option value="Consumer Promotion">Consumer Promotion Launch</option>
+          <option value="Trade Visits">Trade Visits</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="productName">Category of product</label>
+        <input type="text" id="categoryName" required>
+      </div>
+
+      <div>
+        <label for="productName">Product Name</label>
+        <input type="text" id="productName" required>
+      </div>
+
+      <div>
+        <label for="storeName">Store Name</label>
+        <input type="text" id="storeName" required>
+      </div>
+
+      <div>
+        <label for="activationDate">Date(s) to Book</label>
+        <input type="date" id="activationDate" required>
+      </div>
+
+      <!-- BA Section -->
+      <h2>Brand Ambassador Details</h2>
+      <div>
+        <label for="baName">BA Name</label>
+        <input type="text" id="baName" required>
+      </div>
+
+      <div>
+        <label for="baID">BA ID Number</label>
+        <input type="text" id="baID" required>
+      </div>
+
+      <div>
+        <label for="baPhone">BA Phone Number</label>
+        <input type="text" id="baPhone" required>
+      </div>
+
+      <button type="submit" class="btn">Submit Booking</button>
+    </form>
+
+    <footer style="text-align:center;">
+      
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("bookingForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        supplierName: document.getElementById("supplierName").value,
+        companyName: document.getElementById("companyName").value,
+        category: document.getElementById("category").value,
+        productName: document.getElementById("productName").value,
+        storeName: document.getElementById("storeName").value,
+        activationDate: document.getElementById("activationDate").value,
+        baName: document.getElementById("baName").value,
+        baID: document.getElementById("baID").value,
+        baPhone: document.getElementById("baPhone").value
+      };
+
+      try {
+        const res = await fetch("http://localhost:5000/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.message);
+
+        alert(result.message);
+        form.reset();
+      } catch (err) {
+        alert("Error: " + err.message);
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>
