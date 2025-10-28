@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile - Naivas Portal</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: #000;
+  padding: 0.8rem 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo img {
+  height: 45px;
+  width: auto;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #f58220;
+}
+
+.logout-btn {
+  background: #f58220;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #4bb300;
+}
+
+/* ===== PROFILE HEADER ===== */
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #000 0%, #f58220 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin: 2rem auto;
+  max-width: 900px;
+  flex-wrap: wrap;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #4bb300;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.btn-change-avatar {
+  background: #4bb300;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-change-avatar:hover {
+  background: #3a8f00;
+}
+
+.user-info {
+  flex: 1;
+  margin-left: 2rem;
+  text-align: left;
+}
+
+.user-info h2 {
+  margin-top: 0;
+  color: #fff;
+  font-size: 1.8rem;
+}
+
+.user-info p {
+  margin: 0.4rem 0;
+  color: #fefefe;
+  font-size: 1rem;
+}
+
+/* ===== SECTIONS ===== */
+.profile-container {
+  max-width: 900px;
+  background: white;
+  margin: 1rem auto 3rem;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  color: #4bb300;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #4bb300;
+  padding-bottom: 0.4rem;
+}
+
+.btn {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #0056b3;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+th {
+  background: #4bb300;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+</style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <script>
+    // Load the navbar and then attach event handlers
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-placeholder").innerHTML = html;
+
+        // ✅ Run only after navbar is inserted
+        const user = JSON.parse(localStorage.getItem("loggedInUser"));
+        const nameEl = document.getElementById("profileName");
+        const picEl = document.getElementById("profilePic");
+
+        if (user) {
+          nameEl.textContent = user.SupplierName || "User";
+          if (user.profilePic) picEl.src = user.profilePic;
+        }
+
+        const dropdown = document.querySelector(".profile-dropdown");
+        const trigger = document.querySelector(".profile-trigger");
+        const logoutLink = document.getElementById("logoutLink");
+
+        trigger.addEventListener("click", () => {
+          dropdown.classList.toggle("active");
+        });
+
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("active");
+        });
+
+        logoutLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.clear();
+          window.location.href = "signin.html";
+        });
+      })
+      .catch(err => console.error("Error loading navbar:", err));
+  </script>
+
+<!-- ===== Profile Header Section ===== -->
+<div class="profile-header">
+  <div class="avatar-container">
+    <img id="avatarImg" src="images/avatar.png" alt="User Avatar">
+    <input type="file" id="avatarInput" accept="image/*">
+    <button class="btn-change-avatar" onclick="chooseAvatar()">Change Avatar</button>
+  </div>
+
+  <div class="user-info">
+    <h2>Welcome, <span id="userName">User</span> 👋</h2>
+    <p><strong>Email:</strong> <span id="email">-</span></p>
+    <p><strong>Company:</strong> <span id="companyName">-</span></p>
+    <p><strong>Phone:</strong> <span id="phoneNumber">-</span></p>
+  </div>
+</div>
+
+<!-- ===== Account + Tables ===== -->
+<div class="profile-container">
+  <div class="info-section">
+    <h3 class="section-title">Account Management</h3>
+    <button class="btn btn-edit" onclick="resetPassword()">Reset Password</button>
+    <button class="btn btn-delete" onclick="deleteProfile()">Delete Profile</button>
+  </div>
+
+  <div class="activation-section">
+    <h3 class="section-title">Activation Summary</h3>
+    <table>
+      <thead><tr><th>Category</th><th>Store</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody id="activationTable"><tr><td colspan="4">Loading...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="ba-section">
+    <h3 class="section-title">Brand Ambassadors</h3>
+    <table>
+      <thead><tr><th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th></tr></thead>
+      <tbody id="baTable"><tr><td colspan="4">Loading...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user) {
+  alert("Please log in first!");
+  window.location.href = "signin.html";
+} else {
+  document.getElementById("userName").textContent = user.SupplierName;
+  document.getElementById("companyName").textContent = user.companyName || "Not provided";
+  document.getElementById("email").textContent = user.email;
+  document.getElementById("phoneNumber").textContent = user.PhoneNumber;
+}
+
+const avatarImg = document.getElementById("avatarImg");
+const avatarInput = document.getElementById("avatarInput");
+const storedAvatar = localStorage.getItem("userAvatar");
+if (storedAvatar) avatarImg.src = storedAvatar;
+
+function chooseAvatar() { avatarInput.click(); }
+
+avatarInput.addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    avatarImg.src = e.target.result;
+    localStorage.setItem("userAvatar", e.target.result);
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("userAvatar");
+  alert("You have been logged out.");
+  window.location.href = "signin.html";
+});
+
+async function resetPassword() {
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/send_reset_link.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email })
+    });
+    const data = await res.json();
+    alert(data.message);
+  } catch (err) {
+    alert("Error sending password reset link.");
+    console.error(err);
+  }
+}
+
+function deleteProfile() {
+  if (confirm("Are you sure you want to delete your profile?")) {
+    alert("Profile deleted successfully!");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("userAvatar");
+    window.location.href = "signup.html";
+  }
+}
+
+async function loadActivations() {
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/get_activations.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email })
+    });
+    const data = await res.json();
+    const tbody = document.getElementById("activationTable");
+    tbody.innerHTML = "";
+    if (!data || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4">No activations found.</td></tr>';
+      return;
+    }
+    data.forEach(act => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${act.productCategory}</td><td>${act.storeName}</td><td>${act.activationDate}</td><td>${act.status}</td>`;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function loadBAs() {
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/getBAs.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email })
+    });
+    const response = await res.json();
+    const tbody = document.getElementById("baTable");
+    tbody.innerHTML = "";
+    if (!response.success || !response.data.length) {
+      tbody.innerHTML = '<tr><td colspan="4">No BAs found.</td></tr>';
+      return;
+    }
+    response.data.forEach(ba => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${ba.name}</td><td>${ba.idNumber}</td><td>${ba.phoneNumber}</td><td>${ba.status}</td>`;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadActivations();
+  loadBAs();
+});
+</script>
+</body>
+</html>

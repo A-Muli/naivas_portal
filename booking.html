@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book Activation | Naivas Portal</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: #000;
+    padding: 0.8rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo img {
+    height: 45px;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+
+  nav ul li a:hover {
+    color: #f58220;
+  }
+
+  .logout-btn {
+    background: #f58220;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .logout-btn:hover {
+    background: #4bb300;
+  }
+
+  /* ===== FORM CONTAINER ===== */
+  .container {
+    background: #fff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 800px;
+    margin: 2.5rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #f58220;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #333;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #f58220;
+  }
+
+  button {
+    padding: 0.9rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .submit-btn {
+    background: #f58220;
+    color: white;
+    width: 100%;
+    margin-top: 1.5rem;
+    transition: background 0.3s;
+  }
+
+  .submit-btn:hover {
+    background: #4bb300;
+  }
+
+  /* ===== BA SECTION ===== */
+  .ba-section {
+    background: #f9fafb;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    margin-top: 1.5rem;
+  }
+
+  .ba-section h3 {
+    color: #000;
+    margin-bottom: 1rem;
+  }
+
+  .ba-entry {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .ba-entry h4 {
+    color: #f58220;
+    margin-bottom: 0.5rem;
+  }
+
+  .remove-ba {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .remove-ba:hover { background: #c0392b; }
+
+  .add-ba {
+    background: #4bb300;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+    transition: background 0.3s;
+  }
+
+  .add-ba:hover { background: #3b8e00; }
+</style>
+</head>
+
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <script>
+    // Load the navbar and then attach event handlers
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-placeholder").innerHTML = html;
+
+        // ✅ Run only after navbar is inserted
+        const user = JSON.parse(localStorage.getItem("loggedInUser"));
+        const nameEl = document.getElementById("profileName");
+        const picEl = document.getElementById("profilePic");
+
+        if (user) {
+          nameEl.textContent = user.SupplierName || "User";
+          if (user.profilePic) picEl.src = user.profilePic;
+        }
+
+        const dropdown = document.querySelector(".profile-dropdown");
+        const trigger = document.querySelector(".profile-trigger");
+        const logoutLink = document.getElementById("logoutLink");
+
+        trigger.addEventListener("click", () => {
+          dropdown.classList.toggle("active");
+        });
+
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("active");
+        });
+
+        logoutLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.clear();
+          window.location.href = "signin.html";
+        });
+      })
+      .catch(err => console.error("Error loading navbar:", err));
+  </script>
+<div class="container">
+  <h2>Book an Activation</h2>
+  <form id="bookingForm">
+    <div class="form-group">
+      <label for="productCategory">Product Category</label>
+      <select id="productCategory" required>
+        <option value="">Select Category</option>
+        <option value="Grocery 1">Grocery 1</option>
+        <option value="Fresh">Fresh</option>
+        <option value="Fresh Produce">Fresh Produce</option>
+        <option value="Home & Hygiene">Home & Hygiene</option>
+        <option value="Non Food">Non Food</option>
+        <option value="Impulse & Liquor">Impulse & Liquor</option>
+        <option value="Food Pantry">Food Pantry</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="productType">Product Type</label>
+      <select id="productType" required>
+        <option value="">Select Product Type</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input type="text" id="productName" required placeholder="Enter product name">
+    </div>
+
+    <div class="form-group">
+      <label for="storeName">Store</label>
+      <select id="storeName" required>
+        <option value="">Select Store</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="activationDate">Activation Date</label>
+      <input type="date" id="activationDate" required>
+    </div>
+
+    <div class="ba-section">
+      <h3>Brand Ambassadors</h3>
+      <p style="font-size: 0.9rem; color: #555; margin-top: -5px;">Please add at least one Brand Ambassador before submitting.</p>
+      <div id="baContainer"></div>
+      <button type="button" class="add-ba" id="addBA">+ Add Brand Ambassador</button>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Booking</button>
+  </form>
+</div>
+
+<script>
+// ----------------------------
+// Header logout
+// ----------------------------
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "signin.html";
+});
+
+// ----------------------------
+// Product Mapping
+// ----------------------------
+const productMapping = {
+  "Grocery 1": ["Milk", "Flour", "Fats & Oils", "Sugar", "Rice", "Pasta + Noodles", "Cereals & Pulses"],
+  "Fresh": ["Chilled & Frozen Products", "Fresh Meat, Poultry & Eggs", "Naivas Bakery", "Meat Products", "Outsourced Bakery", "Naivas Deli + Coffee Shop"],
+  "Fresh Produce": ["Fruits + Veg"],
+  "Home & Hygiene": ["Laundry", "Personal Care", "Beauty", "Paper + Plastics", "Health Care and Nutrition", "Baby Products", "Home Cleaning", "Household Essentials", "Pet Care", "Aircare + Home Fragrance"],
+  "Non Food": ["Electronics", "Textiles", "Stationery", "Kitchen and Dining", "Leisure & DIY"],
+  "Impulse & Liquor": ["Snacks", "Confectionery", "Spirits", "Beer", "Wine", "Smoking Accessories"],
+  "Food Pantry": ["Cold Beverage", "Food Additives", "Breakfast", "Hot Beverage", "Canned & Ethnic Foods"]
+};
+
+document.getElementById("productCategory").addEventListener("change", function() {
+  const typeDropdown = document.getElementById("productType");
+  typeDropdown.innerHTML = '<option value="">Select Product Type</option>';
+  const selectedCategory = this.value;
+  if (productMapping[selectedCategory]) {
+    productMapping[selectedCategory].forEach(type => {
+      const option = document.createElement("option");
+      option.value = type;
+      option.textContent = type;
+      typeDropdown.appendChild(option);
+    });
+  }
+});
+
+// ----------------------------
+// Date Validation
+// ----------------------------
+document.getElementById("activationDate").addEventListener("change", function() {
+  const date = new Date(this.value);
+  const day = date.getDay();
+  if (![0,5,6].includes(day)) {
+    alert("Please select a Friday, Saturday, or Sunday.");
+    this.value = "";
+  }
+});
+
+// ----------------------------
+// Load Stores
+// ----------------------------
+async function loadStores() {
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/getstores.php");
+    const stores = await res.json();
+    const dropdown = document.getElementById("storeName");
+    stores.forEach(store => {
+      const option = document.createElement("option");
+      option.value = store.storeName;
+      option.textContent = `${store.storeName} (${store.region})`;
+      dropdown.appendChild(option);
+    });
+  } catch (err) {
+    alert("Error loading stores.");
+  }
+}
+document.addEventListener("DOMContentLoaded", loadStores);
+
+// ----------------------------
+// Brand Ambassadors Section
+// ----------------------------
+const baContainer = document.getElementById("baContainer");
+const addBAButton = document.getElementById("addBA");
+let baCount = 0;
+
+addBAButton.addEventListener("click", () => {
+  if (baCount >= 3) { alert("You can add up to 3 Brand Ambassadors only."); return; }
+  baCount++;
+
+  const baDiv = document.createElement("div");
+  baDiv.classList.add("ba-entry");
+  baDiv.innerHTML = `
+    <h4>Brand Ambassador ${baCount}</h4>
+    <button type="button" class="remove-ba">Remove</button>
+    <label>Name</label><input type="text" class="ba-name" required>
+    <label>ID Number</label><input type="text" class="ba-id" required>
+    <label>Phone Number</label><input type="text" class="ba-phone" required>
+  `;
+  baDiv.querySelector(".remove-ba").addEventListener("click", () => {
+    baDiv.remove();
+    baCount--;
+  });
+  baContainer.appendChild(baDiv);
+});
+
+// ----------------------------
+// Submit Form (must have BA)
+// ----------------------------
+document.getElementById("bookingForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const supplier = JSON.parse(localStorage.getItem("loggedInUser")) || {};
+  const brandAmbassadors = [...document.querySelectorAll(".ba-entry")].map(entry => ({
+    name: entry.querySelector(".ba-name").value.trim(),
+    idNumber: entry.querySelector(".ba-id").value.trim(),
+    phoneNumber: entry.querySelector(".ba-phone").value.trim()
+  }));
+
+  if (brandAmbassadors.length === 0) {
+    alert("Please add at least one Brand Ambassador before submitting.");
+    return;
+  }
+
+  const data = {
+    supplierEmail: supplier.email,
+    storeName: document.getElementById("storeName").value,
+    productCategory: document.getElementById("productCategory").value,
+    productType: document.getElementById("productType").value,
+    productName: document.getElementById("productName").value,
+    activationDate: document.getElementById("activationDate").value,
+    brandAmbassadors
+  };
+
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/savebooking.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    alert(result.message);
+    if (result.success) {
+      document.getElementById("bookingForm").reset();
+      baContainer.innerHTML = "";
+      baCount = 0;
+    }
+  } catch {
+    alert("Error submitting booking. Please try again.");
+  }
+});
+</script>
+</body>
+</html>
