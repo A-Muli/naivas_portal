@@ -13,7 +13,7 @@ if (!$email) {
 }
 
 // Fetch activations
-$sql = "SELECT productCategory, storeName, activationDate, status 
+$sql = "SELECT productCategory,productName,productType, storeName, activationDate, status 
         FROM bookings WHERE supplierEmail = ? ORDER BY activationDate DESC";
 
 $stmt = $conn->prepare($sql);

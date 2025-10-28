@@ -3,70 +3,167 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Book Activation</title>
+<title>Book Activation | Naivas Portal</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: #000;
+    padding: 0.8rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo img {
+    height: 45px;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
   }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+
+  nav ul li a:hover {
+    color: #f58220;
+  }
+
+  .logout-btn {
+    background: #f58220;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .logout-btn:hover {
+    background: #4bb300;
+  }
+
+  /* ===== FORM CONTAINER ===== */
   .container {
     background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 700px;
-    margin-top: 2rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 800px;
+    margin: 2.5rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
+
   h2 {
     text-align: center;
-    color: #333;
-    margin-bottom: 1rem;
+    color: #f58220;
+    margin-bottom: 1.5rem;
   }
-  .form-group { margin-bottom: 1rem; }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
   label {
     display: block;
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-    color: #444;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #333;
   }
+
   input, select {
     width: 100%;
-    padding: 0.6rem;
+    padding: 0.7rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
+    transition: border-color 0.3s;
   }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #f58220;
+  }
+
   button {
-    padding: 0.8rem;
-    background: #4bb300;
-    color: #fff;
+    padding: 0.9rem;
+    font-size: 1rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  .submit-btn {
+    background: #f58220;
+    color: white;
     width: 100%;
-    font-size: 1rem;
+    margin-top: 1.5rem;
+    transition: background 0.3s;
   }
-  button:hover { background: #3b8e00; }
+
+  .submit-btn:hover {
+    background: #4bb300;
+  }
+
+  /* ===== BA SECTION ===== */
   .ba-section {
-    background: #f5f5f5;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
+    background: #f9fafb;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    margin-top: 1.5rem;
   }
-  .ba-entry {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 6px;
+
+  .ba-section h3 {
+    color: #000;
     margin-bottom: 1rem;
+  }
+
+  .ba-entry {
     background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
     position: relative;
   }
+
+  .ba-entry h4 {
+    color: #f58220;
+    margin-bottom: 0.5rem;
+  }
+
   .remove-ba {
     position: absolute;
     top: 10px;
@@ -77,25 +174,46 @@
     padding: 0.3rem 0.6rem;
     cursor: pointer;
     border-radius: 4px;
+    font-size: 0.9rem;
   }
+
   .remove-ba:hover { background: #c0392b; }
+
   .add-ba {
-    background: #007bff;
+    background: #4bb300;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     color: white;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: bold;
     margin-top: 1rem;
-    display: block;
+    transition: background 0.3s;
   }
-  .add-ba:hover { background: #0056b3; }
+
+  .add-ba:hover { background: #3b8e00; }
 </style>
 </head>
 
 <body>
+<header>
+  <div class="header-container">
+    <div class="logo"><img src="images/logo.png" alt="Naivas Logo"></div>
+    <div class="nav-right">
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        </ul>
+      </nav>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
 <div class="container">
-  <h2>Book Activation</h2>
+  <h2>Book an Activation</h2>
   <form id="bookingForm">
     <div class="form-group">
       <label for="productCategory">Product Category</label>
@@ -137,17 +255,26 @@
 
     <div class="ba-section">
       <h3>Brand Ambassadors</h3>
+      <p style="font-size: 0.9rem; color: #555; margin-top: -5px;">Please add at least one Brand Ambassador before submitting.</p>
       <div id="baContainer"></div>
       <button type="button" class="add-ba" id="addBA">+ Add Brand Ambassador</button>
     </div>
 
-    <button type="submit">Submit Booking</button>
+    <button type="submit" class="submit-btn">Submit Booking</button>
   </form>
 </div>
 
 <script>
 // ----------------------------
-// Product Category Mapping
+// Header logout
+// ----------------------------
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "signin.html";
+});
+
+// ----------------------------
+// Product Mapping
 // ----------------------------
 const productMapping = {
   "Grocery 1": ["Milk", "Flour", "Fats & Oils", "Sugar", "Rice", "Pasta + Noodles", "Cereals & Pulses"],
@@ -159,7 +286,6 @@ const productMapping = {
   "Food Pantry": ["Cold Beverage", "Food Additives", "Breakfast", "Hot Beverage", "Canned & Ethnic Foods"]
 };
 
-// Populate Product Type based on Category
 document.getElementById("productCategory").addEventListener("change", function() {
   const typeDropdown = document.getElementById("productType");
   typeDropdown.innerHTML = '<option value="">Select Product Type</option>';
@@ -175,20 +301,19 @@ document.getElementById("productCategory").addEventListener("change", function()
 });
 
 // ----------------------------
-// Activation Date Validation (Only Fri, Sat, Sun)
+// Date Validation
 // ----------------------------
-const activationDateInput = document.getElementById("activationDate");
-activationDateInput.addEventListener("change", function() {
-  const selectedDate = new Date(this.value);
-  const day = selectedDate.getDay(); // Sunday=0, Monday=1,... Saturday=6
-  if (day !== 5 && day !== 6 && day !== 0) {
-    alert("Please select a date that falls on Friday, Saturday, or Sunday.");
+document.getElementById("activationDate").addEventListener("change", function() {
+  const date = new Date(this.value);
+  const day = date.getDay();
+  if (![0,5,6].includes(day)) {
+    alert("Please select a Friday, Saturday, or Sunday.");
     this.value = "";
   }
 });
 
 // ----------------------------
-// Load Stores from Backend
+// Load Stores
 // ----------------------------
 async function loadStores() {
   try {
@@ -202,8 +327,7 @@ async function loadStores() {
       dropdown.appendChild(option);
     });
   } catch (err) {
-    console.error("Error loading stores:", err);
-    alert("Could not load store list.");
+    alert("Error loading stores.");
   }
 }
 document.addEventListener("DOMContentLoaded", loadStores);
@@ -222,12 +346,12 @@ addBAButton.addEventListener("click", () => {
   const baDiv = document.createElement("div");
   baDiv.classList.add("ba-entry");
   baDiv.innerHTML = `
-    <h4>Brand Ambassador ${baCount} <button type="button" class="remove-ba">Remove</button></h4>
-    <label>Name</label><input type="text" class="ba-name" required placeholder="Enter name">
-    <label>ID Number</label><input type="text" class="ba-id" required placeholder="Enter ID number">
-    <label>Phone Number</label><input type="text" class="ba-phone" required placeholder="Enter phone number">
+    <h4>Brand Ambassador ${baCount}</h4>
+    <button type="button" class="remove-ba">Remove</button>
+    <label>Name</label><input type="text" class="ba-name" required>
+    <label>ID Number</label><input type="text" class="ba-id" required>
+    <label>Phone Number</label><input type="text" class="ba-phone" required>
   `;
-
   baDiv.querySelector(".remove-ba").addEventListener("click", () => {
     baDiv.remove();
     baCount--;
@@ -236,24 +360,29 @@ addBAButton.addEventListener("click", () => {
 });
 
 // ----------------------------
-// Submit Booking Form
+// Submit Form (must have BA)
 // ----------------------------
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+document.getElementById("bookingForm").addEventListener("submit", async e => {
   e.preventDefault();
 
-  const supplier = JSON.parse(localStorage.getItem("loggedInUser")) || { email: "test@example.com" };
+  const supplier = JSON.parse(localStorage.getItem("loggedInUser")) || {};
   const brandAmbassadors = [...document.querySelectorAll(".ba-entry")].map(entry => ({
     name: entry.querySelector(".ba-name").value.trim(),
     idNumber: entry.querySelector(".ba-id").value.trim(),
     phoneNumber: entry.querySelector(".ba-phone").value.trim()
   }));
 
+  if (brandAmbassadors.length === 0) {
+    alert("Please add at least one Brand Ambassador before submitting.");
+    return;
+  }
+
   const data = {
     supplierEmail: supplier.email,
     storeName: document.getElementById("storeName").value,
     productCategory: document.getElementById("productCategory").value,
     productType: document.getElementById("productType").value,
-    productName: document.getElementById("productName").value.trim(),
+    productName: document.getElementById("productName").value,
     activationDate: document.getElementById("activationDate").value,
     brandAmbassadors
   };
@@ -264,24 +393,15 @@ document.getElementById("bookingForm").addEventListener("submit", async function
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
-
-    const text = await res.text();
-    let result;
-    try { result = JSON.parse(text); } catch (err) {
-      console.error("Invalid JSON response:", text);
-      alert("Server returned invalid response.");
-      return;
-    }
-
+    const result = await res.json();
     alert(result.message);
     if (result.success) {
       document.getElementById("bookingForm").reset();
       baContainer.innerHTML = "";
       baCount = 0;
     }
-  } catch (err) {
-    console.error(err);
-    alert("Error connecting to server. Please try again.");
+  } catch {
+    alert("Error submitting booking. Please try again.");
   }
 });
 </script>
