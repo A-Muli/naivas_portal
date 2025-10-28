@@ -58,6 +58,11 @@
       </div>
 
       <div class="form-group">
+        <label for="CompanyName">Company name</label>
+        <input type="text" id="CompanyName" placeholder="Name of your company" required>
+      </div>
+
+      <div class="form-group">
         <label for="PhoneNumber">Phone Number</label>
         <input type="text" id="PhoneNumber" placeholder="Enter your phone number" required>
       </div>
@@ -97,6 +102,7 @@
     const data = {
       SupplierName: document.getElementById("SupplierName").value,
       email: document.getElementById("email").value,
+      CompanyName: document.getElementById("CompanyName").value,
       PhoneNumber: document.getElementById("PhoneNumber").value,
       password: password
     };

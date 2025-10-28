@@ -1,245 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book Activation</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: url("images/booking.jpg") no-repeat center center fixed;
-      background-size: cover;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      position: relative;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book Activation</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 700px;
+    margin-top: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  .form-group { margin-bottom: 1rem; }
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #444;
+  }
+  input, select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  button {
+    padding: 0.8rem;
+    background: #4bb300;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1rem;
+    width: 100%;
+    font-size: 1rem;
+  }
+  button:hover { background: #3b8e00; }
+  .ba-section {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+  .ba-entry {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    background: #fff;
+    position: relative;
+  }
+  .remove-ba {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .remove-ba:hover { background: #c0392b; }
+  .add-ba {
+    background: #007bff;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: block;
+  }
+  .add-ba:hover { background: #0056b3; }
+</style>
+</head>
 
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      margin: 3rem auto;
-      background: rgba(255, 255, 255, 0.5);
-      padding: 2rem 3rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    h1 {
-      text-align: center;
-      color: #007a33;
-      margin-bottom: 2rem;
-    }
-
-    h2 {
-      color: #131111;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 0.5rem;
-    }
-
-    form {
-      display: grid;
-      gap: 1rem;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    input:focus, select:focus {
-      border-color: #007a33;
-      outline: none;
-    }
-
-    .btn {
-      margin-top: 1.5rem;
-      background: #007a33;
-      color: white;
-      padding: 1rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #005d27;
-    }
-
-    .btn-back {
-      display: inline-block;
-      margin-top: 1.5rem;
-      text-align: center;
-      padding: 0.8rem 1.5rem;
-      background: #f58220;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .btn-back:hover {
-      background: #cc681a;
-    }
-  </style>
-  <header>
-  <div class="header-container">
-    <!-- Logo -->
-    <div class="logo">
-      <img src="images/logo.png" alt="Naivas Logo">
+<body>
+<div class="container">
+  <h2>Book Activation</h2>
+  <form id="bookingForm">
+    <div class="form-group">
+      <label for="productCategory">Product Category</label>
+      <select id="productCategory" required>
+        <option value="">Select Category</option>
+        <option value="Grocery 1">Grocery 1</option>
+        <option value="Fresh">Fresh</option>
+        <option value="Fresh Produce">Fresh Produce</option>
+        <option value="Home & Hygiene">Home & Hygiene</option>
+        <option value="Non Food">Non Food</option>
+        <option value="Impulse & Liquor">Impulse & Liquor</option>
+        <option value="Food Pantry">Food Pantry</option>
+      </select>
     </div>
 
-    <!-- Navigation -->
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="profile.html">Profile</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+    <div class="form-group">
+      <label for="productType">Product Type</label>
+      <select id="productType" required>
+        <option value="">Select Product Type</option>
+      </select>
+    </div>
 
-</head>
-<body>
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input type="text" id="productName" required placeholder="Enter product name">
+    </div>
 
-  <div class="container">
-    <h1>Book Your Activation</h1>
+    <div class="form-group">
+      <label for="storeName">Store</label>
+      <select id="storeName" required>
+        <option value="">Select Store</option>
+      </select>
+    </div>
 
-    <form id="bookingForm">
-      <!-- Supplier Section -->
-      <h2>Supplier Details</h2>
-      <div>
-        <label for="supplierName">Supplier Name</label>
-        <input type="text" id="supplierName" required>
-      </div>
+    <div class="form-group">
+      <label for="activationDate">Activation Date</label>
+      <input type="date" id="activationDate" required>
+    </div>
 
-      <div>
-        <label for="companyName">Company Name</label>
-        <input type="text" id="companyName" required>
-      </div>
+    <div class="ba-section">
+      <h3>Brand Ambassadors</h3>
+      <div id="baContainer"></div>
+      <button type="button" class="add-ba" id="addBA">+ Add Brand Ambassador</button>
+    </div>
 
-      <div>
-        <label for="category">Activation Category</label>
-        <select id="category" required>
-          <option value="">Select Activation Category</option>
-          <option value="New Product Launch">New Product In-Store Launch</option>
-          <option value="New Product Activation">New Product Activation</option>
-          <option value="Existing Product Activation">Existing Product Activation</option>
-          <option value="Influencer Activation">Influencer In-Store Activation</option>
-          <option value="Consumer Promotion">Consumer Promotion Launch</option>
-          <option value="Trade Visits">Trade Visits</option>
-        </select>
-      </div>
+    <button type="submit">Submit Booking</button>
+  </form>
+</div>
 
-      <div>
-        <label for="productName">Category of product</label>
-        <input type="text" id="categoryName" required>
-      </div>
+<script>
+// ----------------------------
+// Product Category Mapping
+// ----------------------------
+const productMapping = {
+  "Grocery 1": ["Milk", "Flour", "Fats & Oils", "Sugar", "Rice", "Pasta + Noodles", "Cereals & Pulses"],
+  "Fresh": ["Chilled & Frozen Products", "Fresh Meat, Poultry & Eggs", "Naivas Bakery", "Meat Products", "Outsourced Bakery", "Naivas Deli + Coffee Shop"],
+  "Fresh Produce": ["Fruits + Veg"],
+  "Home & Hygiene": ["Laundry", "Personal Care", "Beauty", "Paper + Plastics", "Health Care and Nutrition", "Baby Products", "Home Cleaning", "Household Essentials", "Pet Care", "Aircare + Home Fragrance"],
+  "Non Food": ["Electronics", "Textiles", "Stationery", "Kitchen and Dining", "Leisure & DIY"],
+  "Impulse & Liquor": ["Snacks", "Confectionery", "Spirits", "Beer", "Wine", "Smoking Accessories"],
+  "Food Pantry": ["Cold Beverage", "Food Additives", "Breakfast", "Hot Beverage", "Canned & Ethnic Foods"]
+};
 
-      <div>
-        <label for="productName">Product Name</label>
-        <input type="text" id="productName" required>
-      </div>
-
-      <div>
-        <label for="storeName">Store Name</label>
-        <input type="text" id="storeName" required>
-      </div>
-
-      <div>
-        <label for="activationDate">Date(s) to Book</label>
-        <input type="date" id="activationDate" required>
-      </div>
-
-      <!-- BA Section -->
-      <h2>Brand Ambassador Details</h2>
-      <div>
-        <label for="baName">BA Name</label>
-        <input type="text" id="baName" required>
-      </div>
-
-      <div>
-        <label for="baID">BA ID Number</label>
-        <input type="text" id="baID" required>
-      </div>
-
-      <div>
-        <label for="baPhone">BA Phone Number</label>
-        <input type="text" id="baPhone" required>
-      </div>
-
-      <button type="submit" class="btn">Submit Booking</button>
-    </form>
-
-    <footer style="text-align:center;">
-      
-    </footer>
-  </div>
-
-  <script>
-    const form = document.getElementById("bookingForm");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const data = {
-        supplierName: document.getElementById("supplierName").value,
-        companyName: document.getElementById("companyName").value,
-        category: document.getElementById("category").value,
-        productName: document.getElementById("productName").value,
-        storeName: document.getElementById("storeName").value,
-        activationDate: document.getElementById("activationDate").value,
-        baName: document.getElementById("baName").value,
-        baID: document.getElementById("baID").value,
-        baPhone: document.getElementById("baPhone").value
-      };
-
-      try {
-        const res = await fetch("http://localhost:5000/api/bookings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.message);
-
-        alert(result.message);
-        form.reset();
-      } catch (err) {
-        alert("Error: " + err.message);
-        console.error(err);
-      }
+// Populate Product Type based on Category
+document.getElementById("productCategory").addEventListener("change", function() {
+  const typeDropdown = document.getElementById("productType");
+  typeDropdown.innerHTML = '<option value="">Select Product Type</option>';
+  const selectedCategory = this.value;
+  if (productMapping[selectedCategory]) {
+    productMapping[selectedCategory].forEach(type => {
+      const option = document.createElement("option");
+      option.value = type;
+      option.textContent = type;
+      typeDropdown.appendChild(option);
     });
-  </script>
+  }
+});
 
+// ----------------------------
+// Activation Date Validation (Only Fri, Sat, Sun)
+// ----------------------------
+const activationDateInput = document.getElementById("activationDate");
+activationDateInput.addEventListener("change", function() {
+  const selectedDate = new Date(this.value);
+  const day = selectedDate.getDay(); // Sunday=0, Monday=1,... Saturday=6
+  if (day !== 5 && day !== 6 && day !== 0) {
+    alert("Please select a date that falls on Friday, Saturday, or Sunday.");
+    this.value = "";
+  }
+});
+
+// ----------------------------
+// Load Stores from Backend
+// ----------------------------
+async function loadStores() {
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/getstores.php");
+    const stores = await res.json();
+    const dropdown = document.getElementById("storeName");
+    stores.forEach(store => {
+      const option = document.createElement("option");
+      option.value = store.storeName;
+      option.textContent = `${store.storeName} (${store.region})`;
+      dropdown.appendChild(option);
+    });
+  } catch (err) {
+    console.error("Error loading stores:", err);
+    alert("Could not load store list.");
+  }
+}
+document.addEventListener("DOMContentLoaded", loadStores);
+
+// ----------------------------
+// Brand Ambassadors Section
+// ----------------------------
+const baContainer = document.getElementById("baContainer");
+const addBAButton = document.getElementById("addBA");
+let baCount = 0;
+
+addBAButton.addEventListener("click", () => {
+  if (baCount >= 3) { alert("You can add up to 3 Brand Ambassadors only."); return; }
+  baCount++;
+
+  const baDiv = document.createElement("div");
+  baDiv.classList.add("ba-entry");
+  baDiv.innerHTML = `
+    <h4>Brand Ambassador ${baCount} <button type="button" class="remove-ba">Remove</button></h4>
+    <label>Name</label><input type="text" class="ba-name" required placeholder="Enter name">
+    <label>ID Number</label><input type="text" class="ba-id" required placeholder="Enter ID number">
+    <label>Phone Number</label><input type="text" class="ba-phone" required placeholder="Enter phone number">
+  `;
+
+  baDiv.querySelector(".remove-ba").addEventListener("click", () => {
+    baDiv.remove();
+    baCount--;
+  });
+  baContainer.appendChild(baDiv);
+});
+
+// ----------------------------
+// Submit Booking Form
+// ----------------------------
+document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const supplier = JSON.parse(localStorage.getItem("loggedInUser")) || { email: "test@example.com" };
+  const brandAmbassadors = [...document.querySelectorAll(".ba-entry")].map(entry => ({
+    name: entry.querySelector(".ba-name").value.trim(),
+    idNumber: entry.querySelector(".ba-id").value.trim(),
+    phoneNumber: entry.querySelector(".ba-phone").value.trim()
+  }));
+
+  const data = {
+    supplierEmail: supplier.email,
+    storeName: document.getElementById("storeName").value,
+    productCategory: document.getElementById("productCategory").value,
+    productType: document.getElementById("productType").value,
+    productName: document.getElementById("productName").value.trim(),
+    activationDate: document.getElementById("activationDate").value,
+    brandAmbassadors
+  };
+
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/savebooking.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const text = await res.text();
+    let result;
+    try { result = JSON.parse(text); } catch (err) {
+      console.error("Invalid JSON response:", text);
+      alert("Server returned invalid response.");
+      return;
+    }
+
+    alert(result.message);
+    if (result.success) {
+      document.getElementById("bookingForm").reset();
+      baContainer.innerHTML = "";
+      baCount = 0;
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error connecting to server. Please try again.");
+  }
+});
+</script>
 </body>
 </html>
