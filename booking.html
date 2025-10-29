@@ -1,432 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Book Activation | Naivas Portal</title>
+
 <style>
-  body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f6f8;
-    color: #333;
-  }
-
-  /* ===== HEADER ===== */
-  header {
-    background: #000;
-    padding: 0.8rem 2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo img {
-    height: 45px;
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1.5rem;
-    margin: 0;
-    padding: 0;
-  }
-
-  nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: color 0.3s;
-  }
-
-  nav ul li a:hover {
-    color: #f58220;
-  }
-
-  .logout-btn {
-    background: #f58220;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0.6rem 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-  .logout-btn:hover {
-    background: #4bb300;
-  }
-
-  /* ===== FORM CONTAINER ===== */
-  .container {
-    background: #fff;
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
-    width: 95%;
-    max-width: 800px;
-    margin: 2.5rem auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-
-  h2 {
-    text-align: center;
-    color: #f58220;
-    margin-bottom: 1.5rem;
-  }
-
-  .form-group {
-    margin-bottom: 1.2rem;
-  }
-
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    color: #333;
-  }
-
-  input, select {
-    width: 100%;
-    padding: 0.7rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-  }
-
-  input:focus, select:focus {
-    outline: none;
-    border-color: #f58220;
-  }
-
-  button {
-    padding: 0.9rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .submit-btn {
-    background: #f58220;
-    color: white;
-    width: 100%;
-    margin-top: 1.5rem;
-    transition: background 0.3s;
-  }
-
-  .submit-btn:hover {
-    background: #4bb300;
-  }
-
-  /* ===== BA SECTION ===== */
-  .ba-section {
-    background: #f9fafb;
-    padding: 1rem 1.2rem;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
-    margin-top: 1.5rem;
-  }
-
-  .ba-section h3 {
-    color: #000;
-    margin-bottom: 1rem;
-  }
-
-  .ba-entry {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    position: relative;
-  }
-
-  .ba-entry h4 {
-    color: #f58220;
-    margin-bottom: 0.5rem;
-  }
-
-  .remove-ba {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #e74c3c;
-    border: none;
-    color: white;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-
-  .remove-ba:hover { background: #c0392b; }
-
-  .add-ba {
-    background: #4bb300;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 1rem;
-    transition: background 0.3s;
-  }
-
-  .add-ba:hover { background: #3b8e00; }
+  body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f6f8;}
+  .container{background:#fff;padding:2rem;border-radius:12px;max-width:900px;margin:2rem auto;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+  label{font-weight:600;margin-bottom:.4rem;display:block;}
+  input,select{width:100%;padding:.7rem;border:1px solid #ccc;border-radius:6px;}
+  button{padding:.9rem;border:none;border-radius:6px;cursor:pointer;font-weight:bold;}
+  .submit-btn{background:#f58220;color:#fff;width:100%;margin-top:1.5rem;}
+  .ba-section{background:#fafafa;padding:1rem;border-radius:8px;margin-top:1rem;border:1px solid #ddd;}
+  .ba-entry{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:1rem;position:relative;}
+  .remove-ba{position:absolute;top:10px;right:10px;background:#e74c3c;color:#fff;padding:.3rem .6rem;border-radius:4px;}
+  .add-ba{background:#4bb300;color:#fff;padding:.6rem;border-radius:6px;margin-top:.5rem;}
+  table{width:100%;border-collapse:collapse;margin-top:2rem;}
+  th,td{padding:.8rem;border:1px solid #ddd;font-size:.9rem;}
+  th{background:#f58220;color:#fff;text-align:left;}
+  .cancel-btn{background:#c0392b;color:#fff;padding:.4rem .7rem;border-radius:5px;cursor:pointer;}
+  .profile{font-weight:bold;color:#f58220;margin-bottom:.5rem;}
 </style>
 </head>
-
 <body>
-  <div id="navbar-placeholder"></div>
 
-  <script>
-    // Load the navbar and then attach event handlers
-    fetch("navbar.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("navbar-placeholder").innerHTML = html;
+<div id="navbar-placeholder"></div>
+<script>
+// ✅ Load Navbar
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("navbar-placeholder").innerHTML = html;
 
-        // ✅ Run only after navbar is inserted
-        const user = JSON.parse(localStorage.getItem("loggedInUser"));
-        const nameEl = document.getElementById("profileName");
-        const picEl = document.getElementById("profilePic");
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const nameEl = document.getElementById("profileName");
+    const picEl = document.getElementById("profilePic");
 
-        if (user) {
-          nameEl.textContent = user.SupplierName || "User";
-          if (user.profilePic) picEl.src = user.profilePic;
-        }
+    if (user) {
+      nameEl.textContent = user.SupplierName || "User";
+      if (user.profilePic) picEl.src = user.profilePic;
+    }
 
-        const dropdown = document.querySelector(".profile-dropdown");
-        const trigger = document.querySelector(".profile-trigger");
-        const logoutLink = document.getElementById("logoutLink");
+    const dropdown = document.querySelector(".profile-dropdown");
+    const trigger = document.querySelector(".profile-trigger");
+    const logoutLink = document.getElementById("logoutLink");
 
-        trigger.addEventListener("click", () => {
-          dropdown.classList.toggle("active");
-        });
+    trigger.addEventListener("click", () => dropdown.classList.toggle("active"));
+    window.addEventListener("click", e => { if(!dropdown.contains(e.target)) dropdown.classList.remove("active"); });
 
-        window.addEventListener("click", (e) => {
-          if (!dropdown.contains(e.target)) dropdown.classList.remove("active");
-        });
+    logoutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = "signin.html";
+    });
+  });
+</script>
 
-        logoutLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.clear();
-          window.location.href = "signin.html";
-        });
-      })
-      .catch(err => console.error("Error loading navbar:", err));
-  </script>
+
 <div class="container">
-  <h2>Book an Activation</h2>
-  <form id="bookingForm">
-    <div class="form-group">
-      <label for="productCategory">Product Category</label>
-      <select id="productCategory" required>
-        <option value="">Select Category</option>
-        <option value="Grocery 1">Grocery 1</option>
-        <option value="Fresh">Fresh</option>
-        <option value="Fresh Produce">Fresh Produce</option>
-        <option value="Home & Hygiene">Home & Hygiene</option>
-        <option value="Non Food">Non Food</option>
-        <option value="Impulse & Liquor">Impulse & Liquor</option>
-        <option value="Food Pantry">Food Pantry</option>
-      </select>
-    </div>
+<h2 style="text-align:center;color:#f58220;">Book an Activation</h2>
+<div class="profile" id="userWelcome"></div>
+<form id="bookingForm">
 
-    <div class="form-group">
-      <label for="productType">Product Type</label>
-      <select id="productType" required>
-        <option value="">Select Product Type</option>
-      </select>
-    </div>
+<div class="form-group">
+<label>Product Category</label>
+<select id="productCategory" required>
+<option value="">Select Category</option>
+<option value="Grocery 1">Grocery 1</option>
+<option value="Fresh">Fresh</option>
+<option value="Fresh Produce">Fresh Produce</option>
+<option value="Home & Hygiene">Home & Hygiene</option>
+<option value="Non Food">Non Food</option>
+<option value="Impulse & Liquor">Impulse & Liquor</option>
+<option value="Food Pantry">Food Pantry</option>
+</select>
+</div>
 
-    <div class="form-group">
-      <label for="productName">Product Name</label>
-      <input type="text" id="productName" required placeholder="Enter product name">
-    </div>
+<div class="form-group">
+<label>Product Type</label>
+<select id="productType" required><option value="">Select Product Type</option></select>
+</div>
 
-    <div class="form-group">
-      <label for="storeName">Store</label>
-      <select id="storeName" required>
-        <option value="">Select Store</option>
-      </select>
-    </div>
+<div class="form-group">
+<label>Product Name</label>
+<input type="text" id="productName" required/>
+</div>
 
-    <div class="form-group">
-      <label for="activationDate">Activation Date</label>
-      <input type="date" id="activationDate" required>
-    </div>
+<div class="form-group">
+<label>Store</label>
+<select id="storeName" required><option value="">Select Store</option></select>
+</div>
 
-    <div class="ba-section">
-      <h3>Brand Ambassadors</h3>
-      <p style="font-size: 0.9rem; color: #555; margin-top: -5px;">Please add at least one Brand Ambassador before submitting.</p>
-      <div id="baContainer"></div>
-      <button type="button" class="add-ba" id="addBA">+ Add Brand Ambassador</button>
-    </div>
+<div class="form-group">
+<label>Activation Date</label>
+<input type="date" id="activationDate" required/>
+</div>
 
-    <button type="submit" class="submit-btn">Submit Booking</button>
-  </form>
+<div class="ba-section">
+<h3>Brand Ambassadors</h3>
+<div id="baContainer"></div>
+<button type="button" id="addBA" class="add-ba">+ Add Brand Ambassador</button>
+</div>
+
+<button type="submit" class="submit-btn">Submit Booking</button>
+</form>
+
+<h3 style="margin-top:2rem;color:#f58220;">Your Upcoming Bookings</h3>
+<table id="bookingsTable">
+<thead>
+<tr><th>Store</th><th>Date</th><th>Category</th><th>Type</th><th>BAs</th><th>Status</th><th>Action</th></tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
 <script>
-// ----------------------------
-// Header logout
-// ----------------------------
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "signin.html";
-});
+// ✅ Show user welcome
+let user=JSON.parse(localStorage.getItem("loggedInUser"));
+if(!user)location.href="signin.html";
+document.getElementById("userWelcome").innerText = `Welcome, ${user.SupplierName}`;
 
-// ----------------------------
-// Product Mapping
-// ----------------------------
-const productMapping = {
-  "Grocery 1": ["Milk", "Flour", "Fats & Oils", "Sugar", "Rice", "Pasta + Noodles", "Cereals & Pulses"],
-  "Fresh": ["Chilled & Frozen Products", "Fresh Meat, Poultry & Eggs", "Naivas Bakery", "Meat Products", "Outsourced Bakery", "Naivas Deli + Coffee Shop"],
-  "Fresh Produce": ["Fruits + Veg"],
-  "Home & Hygiene": ["Laundry", "Personal Care", "Beauty", "Paper + Plastics", "Health Care and Nutrition", "Baby Products", "Home Cleaning", "Household Essentials", "Pet Care", "Aircare + Home Fragrance"],
-  "Non Food": ["Electronics", "Textiles", "Stationery", "Kitchen and Dining", "Leisure & DIY"],
-  "Impulse & Liquor": ["Snacks", "Confectionery", "Spirits", "Beer", "Wine", "Smoking Accessories"],
-  "Food Pantry": ["Cold Beverage", "Food Additives", "Breakfast", "Hot Beverage", "Canned & Ethnic Foods"]
-};
+// ✅ Category mapping
+const productMapping={"Grocery 1":["Milk","Flour","Fats & Oils","Sugar","Rice","Pasta + Noodles","Cereals & Pulses"],"Fresh":["Chilled & Frozen Products","Fresh Meat, Poultry & Eggs","Naivas Bakery","Meat Products","Outsourced Bakery","Naivas Deli + Coffee Shop"],"Fresh Produce":["Fruits + Veg"],"Home & Hygiene":["Laundry","Personal Care","Beauty","Paper + Plastics","Health Care and Nutrition","Baby Products","Home Cleaning","Household Essentials","Pet Care","Aircare + Home Fragrance"],"Non Food":["Electronics","Textiles","Stationery","Kitchen and Dining","Leisure & DIY"],"Impulse & Liquor":["Snacks","Confectionery","Spirits","Beer","Wine","Smoking Accessories"],"Food Pantry":["Cold Beverage","Food Additives","Breakfast","Hot Beverage","Canned & Ethnic Foods"]};
 
-document.getElementById("productCategory").addEventListener("change", function() {
-  const typeDropdown = document.getElementById("productType");
-  typeDropdown.innerHTML = '<option value="">Select Product Type</option>';
-  const selectedCategory = this.value;
-  if (productMapping[selectedCategory]) {
-    productMapping[selectedCategory].forEach(type => {
-      const option = document.createElement("option");
-      option.value = type;
-      option.textContent = type;
-      typeDropdown.appendChild(option);
-    });
-  }
-});
+document.getElementById("productCategory").onchange=function(){let dd=document.getElementById("productType");dd.innerHTML='<option value="">Select Product Type</option>';(productMapping[this.value]||[]).forEach(t=>dd.innerHTML+=`<option>${t}</option>`);};
 
-// ----------------------------
-// Date Validation
-// ----------------------------
-document.getElementById("activationDate").addEventListener("change", function() {
-  const date = new Date(this.value);
-  const day = date.getDay();
-  if (![0,5,6].includes(day)) {
-    alert("Please select a Friday, Saturday, or Sunday.");
-    this.value = "";
-  }
-});
+// ✅ Load stores
+async function loadStores(){ 
+  const r=await fetch("backend/getstores.php");
+  const s=await r.json();let dd=document.getElementById("storeName");s.forEach(x=>dd.innerHTML+=`<option value="${x.storeName}">${x.storeName} (${x.region})</option>`);}document.addEventListener("DOMContentLoaded",loadStores);
 
-// ----------------------------
-// Load Stores
-// ----------------------------
-async function loadStores() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/getstores.php");
-    const stores = await res.json();
-    const dropdown = document.getElementById("storeName");
-    stores.forEach(store => {
-      const option = document.createElement("option");
-      option.value = store.storeName;
-      option.textContent = `${store.storeName} (${store.region})`;
-      dropdown.appendChild(option);
-    });
-  } catch (err) {
-    alert("Error loading stores.");
-  }
-}
-document.addEventListener("DOMContentLoaded", loadStores);
+// ✅ BA management
+let baCount=0;
+document.getElementById("addBA").onclick=()=>{if(baCount>=3)return alert("Max 3 BAs");baCount++;let d=document.createElement("div");d.className="ba-entry";d.innerHTML=`<h4>BA ${baCount}</h4><button type="button" class="remove-ba">X</button><label>Name</label><input class="ba-name" required><label>ID Number</label><input class="ba-id" required><label>Phone</label><input class="ba-phone" required>`;d.querySelector(".remove-ba").onclick=()=>{d.remove();baCount--;};document.getElementById("baContainer").appendChild(d);};
 
-// ----------------------------
-// Brand Ambassadors Section
-// ----------------------------
-const baContainer = document.getElementById("baContainer");
-const addBAButton = document.getElementById("addBA");
-let baCount = 0;
+// ✅ Capacity check
+async function checkCapacity(store,date,count){const r=await fetch("backend/storecapacity.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({store,date})});const d=await r.json();return d.current + count <= d.max;}
 
-addBAButton.addEventListener("click", () => {
-  if (baCount >= 3) { alert("You can add up to 3 Brand Ambassadors only."); return; }
-  baCount++;
+// ✅ Submit booking
+document.getElementById("bookingForm").onsubmit=async e=>{e.preventDefault();let store=document.getElementById("storeName").value;let date=document.getElementById("activationDate").value;let BAs=[...document.querySelectorAll(".ba-entry")].map(x=>({name:x.querySelector(".ba-name").value,idNumber:x.querySelector(".ba-id").value,phoneNumber:x.querySelector(".ba-phone").value}));if(!BAs.length)return alert("Add at least one BA");if(!(await checkCapacity(store,date,BAs.length)))return alert("Store full that day");let body={supplierEmail:user.email,storeName:store,productCategory:productCategory.value,productType:productType.value,productName:productName.value,activationDate:date,brandAmbassadors:BAs};let r=await fetch("backend/savebooking.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});let j=await r.json();alert(j.message);if(j.success)loadBookings();};
 
-  const baDiv = document.createElement("div");
-  baDiv.classList.add("ba-entry");
-  baDiv.innerHTML = `
-    <h4>Brand Ambassador ${baCount}</h4>
-    <button type="button" class="remove-ba">Remove</button>
-    <label>Name</label><input type="text" class="ba-name" required>
-    <label>ID Number</label><input type="text" class="ba-id" required>
-    <label>Phone Number</label><input type="text" class="ba-phone" required>
-  `;
-  baDiv.querySelector(".remove-ba").addEventListener("click", () => {
-    baDiv.remove();
-    baCount--;
-  });
-  baContainer.appendChild(baDiv);
-});
+// ✅ Load user bookings
+async function loadBookings(){const r=await fetch(`backend/getbooking.php?email=${user.email}`);const data=await r.json();let tbody=document.querySelector("#bookingsTable tbody");tbody.innerHTML="";data.forEach(b=>{tbody.innerHTML+=`<tr><td>${b.storeName}</td><td>${b.activationDate}</td><td>${b.productCategory}</td><td>${b.productType}</td><td>${b.no_of_BAs}</td><td>${b.status}</td><td>${b.status=='pending'?`<button class='cancel-btn' onclick="cancelBooking(${b.id})">Cancel</button>`:''}</td></tr>`;});}
 
-// ----------------------------
-// Submit Form (must have BA)
-// ----------------------------
-document.getElementById("bookingForm").addEventListener("submit", async e => {
-  e.preventDefault();
+// ✅ Cancel booking
+async function cancelBooking(id){if(!confirm("Cancel booking?"))return;await fetch("backend/bookingaction.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,action:"cancel"})});alert("Booking cancelled");loadBookings();}
 
-  const supplier = JSON.parse(localStorage.getItem("loggedInUser")) || {};
-  const brandAmbassadors = [...document.querySelectorAll(".ba-entry")].map(entry => ({
-    name: entry.querySelector(".ba-name").value.trim(),
-    idNumber: entry.querySelector(".ba-id").value.trim(),
-    phoneNumber: entry.querySelector(".ba-phone").value.trim()
-  }));
-
-  if (brandAmbassadors.length === 0) {
-    alert("Please add at least one Brand Ambassador before submitting.");
-    return;
-  }
-
-  const data = {
-    supplierEmail: supplier.email,
-    storeName: document.getElementById("storeName").value,
-    productCategory: document.getElementById("productCategory").value,
-    productType: document.getElementById("productType").value,
-    productName: document.getElementById("productName").value,
-    activationDate: document.getElementById("activationDate").value,
-    brandAmbassadors
-  };
-
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/savebooking.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    alert(result.message);
-    if (result.success) {
-      document.getElementById("bookingForm").reset();
-      baContainer.innerHTML = "";
-      baCount = 0;
-    }
-  } catch {
-    alert("Error submitting booking. Please try again.");
-  }
-});
+loadBookings();
 </script>
 </body>
 </html>

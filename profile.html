@@ -260,7 +260,7 @@ tr:nth-child(even) {
   <div class="user-info">
     <h2>Welcome, <span id="userName">User</span> 👋</h2>
     <p><strong>Email:</strong> <span id="email">-</span></p>
-    <p><strong>Company:</strong> <span id="companyName">-</span></p>
+    <p><strong>Company:</strong> <span id="CompanyName">-</span></p>
     <p><strong>Phone:</strong> <span id="phoneNumber">-</span></p>
   </div>
 </div>
@@ -272,22 +272,6 @@ tr:nth-child(even) {
     <button class="btn btn-edit" onclick="resetPassword()">Reset Password</button>
     <button class="btn btn-delete" onclick="deleteProfile()">Delete Profile</button>
   </div>
-
-  <div class="activation-section">
-    <h3 class="section-title">Activation Summary</h3>
-    <table>
-      <thead><tr><th>Category</th><th>Store</th><th>Date</th><th>Status</th></tr></thead>
-      <tbody id="activationTable"><tr><td colspan="4">Loading...</td></tr></tbody>
-    </table>
-  </div>
-
-  <div class="ba-section">
-    <h3 class="section-title">Brand Ambassadors</h3>
-    <table>
-      <thead><tr><th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th></tr></thead>
-      <tbody id="baTable"><tr><td colspan="4">Loading...</td></tr></tbody>
-    </table>
-  </div>
 </div>
 
 <script>
@@ -297,7 +281,7 @@ if (!user) {
   window.location.href = "signin.html";
 } else {
   document.getElementById("userName").textContent = user.SupplierName;
-  document.getElementById("companyName").textContent = user.companyName || "Not provided";
+  document.getElementById("CompanyName").textContent = user.CompanyName || "Not provided";
   document.getElementById("email").textContent = user.email;
   document.getElementById("phoneNumber").textContent = user.PhoneNumber;
 }
@@ -329,7 +313,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 async function resetPassword() {
   try {
-    const res = await fetch("http://localhost/naivas_portal/backend/send_reset_link.php", {
+    const res = await fetch("http://localhost/naivas_portal/backend/resetlink.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: user.email })
@@ -351,58 +335,7 @@ function deleteProfile() {
   }
 }
 
-async function loadActivations() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/get_activations.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const data = await res.json();
-    const tbody = document.getElementById("activationTable");
-    tbody.innerHTML = "";
-    if (!data || data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4">No activations found.</td></tr>';
-      return;
-    }
-    data.forEach(act => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${act.productCategory}</td><td>${act.storeName}</td><td>${act.activationDate}</td><td>${act.status}</td>`;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
 
-async function loadBAs() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/getBAs.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const response = await res.json();
-    const tbody = document.getElementById("baTable");
-    tbody.innerHTML = "";
-    if (!response.success || !response.data.length) {
-      tbody.innerHTML = '<tr><td colspan="4">No BAs found.</td></tr>';
-      return;
-    }
-    response.data.forEach(ba => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${ba.name}</td><td>${ba.idNumber}</td><td>${ba.phoneNumber}</td><td>${ba.status}</td>`;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadActivations();
-  loadBAs();
-});
 </script>
 </body>
 </html>
