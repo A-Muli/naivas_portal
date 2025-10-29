@@ -3,213 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile - Naivas Portal</title>
+<title>Profile | Naivas Portal</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f4f6f8;
-  color: #333;
-}
+  /* ===== General ===== */
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+  }
 
-/* ===== HEADER ===== */
-header {
-  background: #000;
-  padding: 0.8rem 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+  a { text-decoration: none; }
 
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  .container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+  }
 
-.logo img {
-  height: 45px;
-  width: auto;
-}
+  h2 {
+    color: #f58220;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
+  /* ===== Card ===== */
+  .card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+  }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-}
+  .card h3 {
+    color: #4bb300;
+    margin-bottom: 1rem;
+  }
 
-nav ul li a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: color 0.3s;
-}
+  /* ===== Account Details ===== */
+  .account-details {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
 
-nav ul li a:hover {
-  color: #f58220;
-}
+  .avatar-container {
+    position: relative;
+  }
 
-.logout-btn {
-  background: #f58220;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.6rem 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
+  .avatar-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f58220;
+    cursor: pointer;
+  }
 
-.logout-btn:hover {
-  background: #4bb300;
-}
+  .avatar-container input {
+    display: none;
+  }
 
-/* ===== PROFILE HEADER ===== */
-.profile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(90deg, #000 0%, #f58220 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  margin: 2rem auto;
-  max-width: 900px;
-  flex-wrap: wrap;
-}
+  .account-info {
+    flex: 1;
+  }
 
-.avatar-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+  .account-info p {
+    font-size: 1rem;
+    margin: 0.4rem 0;
+  }
 
-.avatar-container img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 4px solid #4bb300;
-  object-fit: cover;
-  margin-bottom: 1rem;
-}
+  /* ===== Profile Settings ===== */
+  .form-group {
+    margin-bottom: 1rem;
+  }
 
-.btn-change-avatar {
-  background: #4bb300;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
 
-.btn-change-avatar:hover {
-  background: #3a8f00;
-}
+  input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
 
-.user-info {
-  flex: 1;
-  margin-left: 2rem;
-  text-align: left;
-}
+  button {
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: 0.3s;
+  }
 
-.user-info h2 {
-  margin-top: 0;
-  color: #fff;
-  font-size: 1.8rem;
-}
+  .save-btn {
+    background: #4bb300;
+    color: white;
+  }
 
-.user-info p {
-  margin: 0.4rem 0;
-  color: #fefefe;
-  font-size: 1rem;
-}
+  .save-btn:hover { background: #369200; }
 
-/* ===== SECTIONS ===== */
-.profile-container {
-  max-width: 900px;
-  background: white;
-  margin: 1rem auto 3rem;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+  .delete-btn {
+    background: #e74c3c;
+    color: white;
+  }
 
-.section-title {
-  color: #4bb300;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  border-bottom: 2px solid #4bb300;
-  padding-bottom: 0.4rem;
-}
+  .delete-btn:hover { background: #c0392b; }
 
-.btn {
-  display: inline-block;
-  margin-right: 10px;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-edit {
-  background: #007bff;
-  color: white;
-}
-
-.btn-edit:hover {
-  background: #0056b3;
-}
-
-.btn-delete {
-  background: #e74c3c;
-  color: white;
-}
-
-.btn-delete:hover {
-  background: #c0392b;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 0.8rem;
-  text-align: center;
-}
-
-th {
-  background: #4bb300;
-  color: white;
-}
-
-tr:nth-child(even) {
-  background: #f9f9f9;
-}
+  hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
 </style>
 </head>
 <body>
 
-  <div id="navbar-placeholder"></div>
+     <div id="navbar-placeholder"></div>
 
   <script>
     // Load the navbar and then attach event handlers
@@ -249,144 +164,139 @@ tr:nth-child(even) {
       .catch(err => console.error("Error loading navbar:", err));
   </script>
 
-<!-- ===== Profile Header Section ===== -->
-<div class="profile-header">
-  <div class="avatar-container">
-    <img id="avatarImg" src="images/avatar.png" alt="User Avatar">
-    <input type="file" id="avatarInput" accept="image/*">
-    <button class="btn-change-avatar" onclick="chooseAvatar()">Change Avatar</button>
+<div class="container">
+  <h2>My Profile</h2>
+
+  <!-- ===== Account Details ===== -->
+  <div class="card">
+    <h3>Account Details</h3>
+    <div class="account-details">
+      <div class="avatar-container">
+        <img src="default-avatar.png" id="avatarImage" alt="Avatar">
+        <input type="file" id="avatarInput" accept="image/*">
+      </div>
+      <div class="account-info">
+        <p><strong>Name:</strong> <span id="nameDisplay">-</span></p>
+        <p><strong>Company:</strong> <span id="companyDisplay">-</span></p>
+        <p><strong>Email:</strong> <span id="emailDisplay">-</span></p>
+        <p><strong>Phone:</strong> <span id="phoneDisplay">-</span></p>
+      </div>
+    </div>
   </div>
 
-  <div class="user-info">
-    <h2>Welcome, <span id="userName">User</span> 👋</h2>
-    <p><strong>Email:</strong> <span id="email">-</span></p>
-    <p><strong>Company:</strong> <span id="CompanyName">-</span></p>
-    <p><strong>Phone:</strong> <span id="phoneNumber">-</span></p>
+  <!-- ===== Profile Settings ===== -->
+  <div class="card">
+    <h3>Profile Settings</h3>
+    <form id="profileForm">
+      <div class="form-group">
+        <label for="nameInput">Name</label>
+        <input type="text" id="nameInput" required>
+      </div>
+      <div class="form-group">
+        <label for="phoneInput">Phone Number</label>
+        <input type="text" id="phoneInput" required>
+      </div>
+      <button type="submit" class="save-btn">Save Changes</button>
+    </form>
   </div>
+<!-- ===== Reset Password Section ===== -->
+<div class="card">
+  <h3>Reset Password</h3>
+  <form id="resetPasswordForm">
+    <div class="form-group">
+      <label for="oldPassword">Old Password</label>
+      <input type="password" id="oldPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">Confirm New Password</label>
+      <input type="password" id="confirmPassword" required>
+    </div>
+    <button type="submit" class="save-btn">Update Password</button>
+  </form>
 </div>
 
-<!-- ===== Account + Tables ===== -->
-<div class="profile-container">
-  <div class="info-section">
-    <h3 class="section-title">Account Management</h3>
-    <button class="btn btn-edit" onclick="resetPassword()">Reset Password</button>
-    <button class="btn btn-delete" onclick="deleteProfile()">Delete Profile</button>
+  <!-- ===== Delete Account ===== -->
+  <div class="card">
+    <h3>Delete Account</h3>
+    <p>Deleting your account is permanent. All your data will be removed.</p>
+    <button id="deleteAccount" class="delete-btn">Delete My Account</button>
   </div>
 </div>
 
 <script>
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
-if (!user) {
-  alert("Please log in first!");
-  window.location.href = "signin.html";
-} else {
-  document.getElementById("userName").textContent = user.SupplierName;
-  document.getElementById("CompanyName").textContent = user.CompanyName || "Not provided";
-  document.getElementById("email").textContent = user.email;
-  document.getElementById("phoneNumber").textContent = user.PhoneNumber;
-}
 
-const avatarImg = document.getElementById("avatarImg");
-const avatarInput = document.getElementById("avatarInput");
-const storedAvatar = localStorage.getItem("userAvatar");
-if (storedAvatar) avatarImg.src = storedAvatar;
-
-function chooseAvatar() { avatarInput.click(); }
-
-avatarInput.addEventListener("change", function() {
-  const file = this.files[0];
+// Change Avatar
+avatarImage.addEventListener("click", () => avatarInput.click());
+avatarInput.addEventListener("change", async () => {
+  const file = avatarInput.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    avatarImg.src = e.target.result;
-    localStorage.setItem("userAvatar", e.target.result);
+  const formData = new FormData();
+  formData.append("email", user.email);
+  formData.append("avatar", file);
+
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/changeAvatar.php", {
+      method: "POST",
+      body: formData
+    });
+    const result = await res.json();
+    if (result.success) {
+      avatarImage.src = result.avatarUrl;
+      user.profilePic = result.avatarUrl;
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      alert("Avatar updated successfully!");
+    } else alert(result.message);
+  } catch (err) { alert("Error updating avatar"); }
+});
+
+// Save Profile Changes
+document.getElementById("profileForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = {
+    email: user.email,
+    name: nameInput.value,
+    phone: phoneInput.value,
+    password: document.getElementById("passwordInput").value
   };
-  reader.readAsDataURL(file);
+  try {
+    const res = await fetch("http://localhost/naivas_portal/backend/updateProfile.php", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) {
+      user.SupplierName = nameInput.value;
+      user.phone = phoneInput.value;
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      loadUserProfile();
+      alert("Profile updated successfully!");
+    } else alert(result.message);
+  } catch (err) { alert("Error updating profile"); }
 });
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("loggedInUser");
-  localStorage.removeItem("userAvatar");
-  alert("You have been logged out.");
-  window.location.href = "signin.html";
-});
-
-async function resetPassword() {
+// Delete Account
+document.getElementById("deleteAccount").addEventListener("click", async () => {
+  if (!confirm("Are you sure you want to delete your account? This is permanent.")) return;
   try {
-    const res = await fetch("http://localhost/naivas_portal/backend/resetlink.php", {
+    const res = await fetch("http://localhost/naivas_portal/backend/deleteAccount.php", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ email: user.email })
     });
-    const data = await res.json();
-    alert(data.message);
-  } catch (err) {
-    alert("Error sending password reset link.");
-    console.error(err);
-  }
-}
-
-function deleteProfile() {
-  if (confirm("Are you sure you want to delete your profile?")) {
-    alert("Profile deleted successfully!");
-    localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("userAvatar");
-    window.location.href = "signup.html";
-  }
-}
-
-async function loadActivations() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/get_activations.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const data = await res.json();
-    const tbody = document.getElementById("activationTable");
-    tbody.innerHTML = "";
-    if (!data || data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4">No activations found.</td></tr>';
-      return;
-    }
-    data.forEach(act => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${act.productCategory}</td><td>${act.storeName}</td><td>${act.activationDate}</td><td>${act.status}</td>`;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function loadBAs() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/getBAs.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const response = await res.json();
-    const tbody = document.getElementById("baTable");
-    tbody.innerHTML = "";
-    if (!response.success || !response.data.length) {
-      tbody.innerHTML = '<tr><td colspan="4">No BAs found.</td></tr>';
-      return;
-    }
-    response.data.forEach(ba => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${ba.name}</td><td>${ba.idNumber}</td><td>${ba.phoneNumber}</td><td>${ba.status}</td>`;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadActivations();
-  loadBAs();
+    const result = await res.json();
+    if (result.success) {
+      localStorage.clear();
+      alert("Account deleted successfully!");
+      window.location.href = "signin.html";
+    } else alert(result.message);
+  } catch (err) { alert("Error deleting account"); }
 });
 </script>
+
 </body>
 </html>
