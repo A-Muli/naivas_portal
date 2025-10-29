@@ -209,7 +209,6 @@ tr:nth-child(even) {
 </head>
 <body>
 
-<<<<<<< HEAD
   <div id="navbar-placeholder"></div>
 
   <script>
@@ -249,23 +248,6 @@ tr:nth-child(even) {
       })
       .catch(err => console.error("Error loading navbar:", err));
   </script>
-=======
-<header>
-  <div class="header-container">
-    <div class="logo"><img src="images/logo.png" alt="Naivas Logo"></div>
-    <div class="nav-right">
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a href="profile.html">Profile</a></li>
-        </ul>
-      </nav>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
-  </div>
-</header>
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
 
 <!-- ===== Profile Header Section ===== -->
 <div class="profile-header">
@@ -278,11 +260,7 @@ tr:nth-child(even) {
   <div class="user-info">
     <h2>Welcome, <span id="userName">User</span> 👋</h2>
     <p><strong>Email:</strong> <span id="email">-</span></p>
-<<<<<<< HEAD
     <p><strong>Company:</strong> <span id="CompanyName">-</span></p>
-=======
-    <p><strong>Company:</strong> <span id="companyName">-</span></p>
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
     <p><strong>Phone:</strong> <span id="phoneNumber">-</span></p>
   </div>
 </div>
@@ -294,25 +272,6 @@ tr:nth-child(even) {
     <button class="btn btn-edit" onclick="resetPassword()">Reset Password</button>
     <button class="btn btn-delete" onclick="deleteProfile()">Delete Profile</button>
   </div>
-<<<<<<< HEAD
-=======
-
-  <div class="activation-section">
-    <h3 class="section-title">Activation Summary</h3>
-    <table>
-      <thead><tr><th>Category</th><th>Store</th><th>Date</th><th>Status</th></tr></thead>
-      <tbody id="activationTable"><tr><td colspan="4">Loading...</td></tr></tbody>
-    </table>
-  </div>
-
-  <div class="ba-section">
-    <h3 class="section-title">Brand Ambassadors</h3>
-    <table>
-      <thead><tr><th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th></tr></thead>
-      <tbody id="baTable"><tr><td colspan="4">Loading...</td></tr></tbody>
-    </table>
-  </div>
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
 </div>
 
 <script>
@@ -322,11 +281,7 @@ if (!user) {
   window.location.href = "signin.html";
 } else {
   document.getElementById("userName").textContent = user.SupplierName;
-<<<<<<< HEAD
   document.getElementById("CompanyName").textContent = user.CompanyName || "Not provided";
-=======
-  document.getElementById("companyName").textContent = user.companyName || "Not provided";
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
   document.getElementById("email").textContent = user.email;
   document.getElementById("phoneNumber").textContent = user.PhoneNumber;
 }
@@ -358,11 +313,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 async function resetPassword() {
   try {
-<<<<<<< HEAD
     const res = await fetch("http://localhost/naivas_portal/backend/resetlink.php", {
-=======
-    const res = await fetch("http://localhost/naivas_portal/backend/send_reset_link.php", {
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: user.email })
@@ -384,9 +335,6 @@ function deleteProfile() {
   }
 }
 
-<<<<<<< HEAD
-
-=======
 async function loadActivations() {
   try {
     const res = await fetch("http://localhost/naivas_portal/backend/get_activations.php", {
@@ -439,7 +387,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadActivations();
   loadBAs();
 });
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
 </script>
 </body>
 </html>

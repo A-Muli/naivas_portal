@@ -8,17 +8,19 @@ $input = json_decode(file_get_contents("php://input"), true);
 $email = $input['email'] ?? '';
 
 if (!$email) {
-    echo json_encode([]);
+    echo json_encode(["success" => false, "data" => [], "message" => "No email supplied"]);
     exit;
 }
 
 // Fetch activations
-$sql = "SELECT productCategory,productName,productType, storeName, activationDate, status 
-        FROM bookings WHERE supplierEmail = ? ORDER BY activationDate DESC";
+$sql = "SELECT productCategory, productName, productType, storeName, activationDate, status 
+        FROM bookings 
+        WHERE supplierEmail = ? 
+        ORDER BY activationDate DESC";
 
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
-    echo json_encode(['error' => 'Prepare failed: ' . $conn->error]);
+    echo json_encode(["success" => false, "data" => [], "message" => 'Prepare failed: ' . $conn->error]);
     exit;
 }
 
@@ -28,12 +30,14 @@ $result = $stmt->get_result();
 
 $activations = [];
 while ($row = $result->fetch_assoc()) {
-    // Format activationDate properly
     $row['activationDate'] = date("Y-m-d", strtotime($row['activationDate']));
     $activations[] = $row;
 }
 
-echo json_encode($activations);
+echo json_encode([
+    "success" => true,
+    "data" => $activations
+]);
 
 $stmt->close();
 $conn->close();

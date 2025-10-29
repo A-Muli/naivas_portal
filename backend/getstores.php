@@ -1,37 +1,36 @@
 <?php
-<<<<<<< HEAD
+header("Content-Type: application/json; charset=UTF-8");
 include "db_connect.php";
 
-$query = "SELECT storeName, region, MaxBas, current_bas FROM stores"; 
+// Show PHP errors for debugging
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Query stores table
+$query = "SELECT storeName, region FROM stores ORDER BY storeName ASC";
 $result = $conn->query($query);
 
-$stores = [];
-
-while($row = $result->fetch_assoc()) {
-    $stores[] = [
-        "storeName" => $row["storeName"],
-        "region" => $row["region"],
-        "MaxBas" => (int)$row["MaxBas"],
-        "current_bas" => (int)$row["current_bas"]
-    ];
+if (!$result) {
+    echo json_encode([
+        "success" => false,
+        "message" => "DB Error",
+        "error"   => $conn->error
+    ]);
+    exit;
 }
-
-echo json_encode($stores);
-=======
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
-include("db_connect.php");
-
-// Fetch all stores
-$sql = "SELECT storeName, region FROM stores ORDER BY region, storeName";
-$result = $conn->query($sql);
 
 $stores = [];
 while ($row = $result->fetch_assoc()) {
-  $stores[] = $row;
+    $stores[] = [
+        "storeName" => $row["storeName"],
+        "region"    => $row["region"],
+    //    "MaxBas" => (int)$row["MaxBas"],
+      //  "current_bas" => (int)$row["current_bas"]
+    ];
 }
 
-echo json_encode($stores);
-$conn->close();
->>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
+echo json_encode([
+    "success" => true,
+    "data" => $stores
+]);
 ?>
