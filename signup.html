@@ -134,9 +134,15 @@
 
       // ✅ Redirect based on role
       if (loginResult.user.role === "admin") {
+<<<<<<< HEAD
         window.location.href = "admin.html";
       } else {
         window.location.href = "index.html";
+=======
+        window.location.href = "admin_dashboard.html";
+      } else {
+        window.location.href = "profile.html";
+>>>>>>> 2dadd2d40fee14ef98360b1dc9f671f4539368ba
       }
 
     } catch (err) {
