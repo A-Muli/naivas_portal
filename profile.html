@@ -3,178 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile | Naivas Portal</title>
+<title>My Profile | Naivas Portal</title>
 <link rel="stylesheet" href="style.css">
+
 <style>
-  /* ===== General ===== */
-  body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f6f8;
-    color: #333;
-  }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f6f8;
+}
 
-  a { text-decoration: none; }
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 15px;
+}
 
-  .container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 1rem 2rem;
-  }
+h2 {
+  color: #f58220;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
 
-  h2 {
-    color: #f58220;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.09);
+  margin-bottom: 25px;
+}
 
-  /* ===== Card ===== */
-  .card {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    margin-bottom: 2rem;
-  }
+.card h3 {
+  color: #4bb300;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
 
-  .card h3 {
-    color: #4bb300;
-    margin-bottom: 1rem;
-  }
+.account-details {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
 
-  /* ===== Account Details ===== */
-  .account-details {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
+.avatar-container img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f58220;
+  cursor: pointer;
+}
 
-  .avatar-container {
-    position: relative;
-  }
+.avatar-container input { display: none; }
 
-  .avatar-container img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #f58220;
-    cursor: pointer;
-  }
+.account-info p {
+  margin: 6px 0;
+  font-size: 15px;
+}
 
-  .avatar-container input {
-    display: none;
-  }
+.form-group { margin-bottom: 10px; }
 
-  .account-info {
-    flex: 1;
-  }
+label { font-weight: 600; font-size: 14px; }
 
-  .account-info p {
-    font-size: 1rem;
-    margin: 0.4rem 0;
-  }
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  margin-top: 3px;
+}
 
-  /* ===== Profile Settings ===== */
-  .form-group {
-    margin-bottom: 1rem;
-  }
+button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: .25s;
+}
 
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-  }
+.save-btn { background: #4bb300; color: #fff; }
+.save-btn:hover { background: #3b9200; }
 
-  input[type="text"], input[type="password"], input[type="email"] {
-    width: 100%;
-    padding: 0.6rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-  }
-
-  button {
-    padding: 0.8rem 1.5rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 1rem;
-    transition: 0.3s;
-  }
-
-  .save-btn {
-    background: #4bb300;
-    color: white;
-  }
-
-  .save-btn:hover { background: #369200; }
-
-  .delete-btn {
-    background: #e74c3c;
-    color: white;
-  }
-
-  .delete-btn:hover { background: #c0392b; }
-
-  hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+.delete-btn { background: #e74c3c; color: white; }
+.delete-btn:hover { background: #c0392b; }
 </style>
 </head>
 <body>
 
-     <div id="navbar-placeholder"></div>
+<div id="navbar-placeholder"></div>
 
-  <script>
-    // Load the navbar and then attach event handlers
-    fetch("navbar.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("navbar-placeholder").innerHTML = html;
+<script>
+// Load navbar first, apply avatar & name
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("navbar-placeholder").innerHTML = html;
 
-        // ✅ Run only after navbar is inserted
-        const user = JSON.parse(localStorage.getItem("loggedInUser"));
-        const nameEl = document.getElementById("profileName");
-        const picEl = document.getElementById("profilePic");
-
-        if (user) {
-          nameEl.textContent = user.SupplierName || "User";
-          if (user.profilePic) picEl.src = user.profilePic;
-        }
-
-        const dropdown = document.querySelector(".profile-dropdown");
-        const trigger = document.querySelector(".profile-trigger");
-        const logoutLink = document.getElementById("logoutLink");
-
-        trigger.addEventListener("click", () => {
-          dropdown.classList.toggle("active");
-        });
-
-        window.addEventListener("click", (e) => {
-          if (!dropdown.contains(e.target)) dropdown.classList.remove("active");
-        });
-
-        logoutLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.clear();
-          window.location.href = "signin.html";
-        });
-      })
-      .catch(err => console.error("Error loading navbar:", err));
-  </script>
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (user) {
+      if (document.getElementById("profileName"))
+        document.getElementById("profileName").textContent = user.SupplierName;
+      if (document.getElementById("profilePic") && user.profilePic)
+        document.getElementById("profilePic").src = user.profilePic;
+    }
+  });
+</script>
 
 <div class="container">
   <h2>My Profile</h2>
 
-  <!-- ===== Account Details ===== -->
+  <!-- ACCOUNT DETAILS -->
   <div class="card">
     <h3>Account Details</h3>
     <div class="account-details">
       <div class="avatar-container">
-        <img src="default-avatar.png" id="avatarImage" alt="Avatar">
+        <img id="avatarImage" src="default-avatar.png">
         <input type="file" id="avatarInput" accept="image/*">
       </div>
+
       <div class="account-info">
         <p><strong>Name:</strong> <span id="nameDisplay">-</span></p>
         <p><strong>Company:</strong> <span id="companyDisplay">-</span></p>
@@ -184,118 +133,150 @@
     </div>
   </div>
 
-  <!-- ===== Profile Settings ===== -->
+  <!-- EDIT PROFILE -->
   <div class="card">
-    <h3>Profile Settings</h3>
+    <h3>Update Profile</h3>
     <form id="profileForm">
       <div class="form-group">
-        <label for="nameInput">Name</label>
+        <label>Name</label>
         <input type="text" id="nameInput" required>
       </div>
+
       <div class="form-group">
-        <label for="phoneInput">Phone Number</label>
+        <label>Phone</label>
         <input type="text" id="phoneInput" required>
       </div>
-      <button type="submit" class="save-btn">Save Changes</button>
+
+      <button class="save-btn" type="submit">Save Changes</button>
     </form>
   </div>
-<!-- ===== Reset Password Section ===== -->
-<div class="card">
-  <h3>Reset Password</h3>
-  <form id="resetPasswordForm">
-    <div class="form-group">
-      <label for="oldPassword">Old Password</label>
-      <input type="password" id="oldPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="newPassword">New Password</label>
-      <input type="password" id="newPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="confirmPassword">Confirm New Password</label>
-      <input type="password" id="confirmPassword" required>
-    </div>
-    <button type="submit" class="save-btn">Update Password</button>
-  </form>
-</div>
 
-  <!-- ===== Delete Account ===== -->
+  <!-- RESET PASSWORD -->
+  <div class="card">
+    <h3>Reset Password</h3>
+    <form id="resetPasswordForm">
+      <div class="form-group">
+        <label>Old Password</label>
+        <input type="password" id="oldPassword" required>
+      </div>
+
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="newPassword" required>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword" required>
+      </div>
+
+      <button class="save-btn" type="submit">Update Password</button>
+    </form>
+  </div>
+
+  <!-- DELETE ACCOUNT -->
   <div class="card">
     <h3>Delete Account</h3>
-    <p>Deleting your account is permanent. All your data will be removed.</p>
-    <button id="deleteAccount" class="delete-btn">Delete My Account</button>
+    <p>Once deleted, your account cannot be recovered.</p>
+    <button class="delete-btn" id="deleteAccount">Delete My Account</button>
   </div>
 </div>
 
 <script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+function loadProfile() {
+  nameDisplay.textContent = user.SupplierName;
+  emailDisplay.textContent = user.email;
+  phoneDisplay.textContent = user.phone;
+  companyDisplay.textContent = user.company;
+  avatarImage.src = user.profilePic || "default-avatar.png";
+
+  nameInput.value = user.SupplierName;
+  phoneInput.value = user.phone;
+}
+loadProfile();
 
 // Change Avatar
-avatarImage.addEventListener("click", () => avatarInput.click());
-avatarInput.addEventListener("change", async () => {
+avatarImage.onclick = () => avatarInput.click();
+avatarInput.onchange = async () => {
   const file = avatarInput.files[0];
   if (!file) return;
+
   const formData = new FormData();
   formData.append("email", user.email);
   formData.append("avatar", file);
 
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/changeAvatar.php", {
-      method: "POST",
-      body: formData
-    });
-    const result = await res.json();
-    if (result.success) {
-      avatarImage.src = result.avatarUrl;
-      user.profilePic = result.avatarUrl;
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-      alert("Avatar updated successfully!");
-    } else alert(result.message);
-  } catch (err) { alert("Error updating avatar"); }
-});
+  const r = await fetch("http://localhost/naivas_portal/backend/changeAvatar.php", { method: "POST", body: formData });
+  const res = await r.json();
 
-// Save Profile Changes
-document.getElementById("profileForm").addEventListener("submit", async e => {
+  if (res.success) {
+    avatarImage.src = res.avatarUrl;
+    user.profilePic = res.avatarUrl;
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    location.reload();
+  } else alert(res.message);
+};
+
+// Update Profile
+profileForm.onsubmit = async e => {
   e.preventDefault();
   const data = {
     email: user.email,
     name: nameInput.value,
-    phone: phoneInput.value,
-    password: document.getElementById("passwordInput").value
+    phone: phoneInput.value
   };
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/updateProfile.php", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if (result.success) {
-      user.SupplierName = nameInput.value;
-      user.phone = phoneInput.value;
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-      loadUserProfile();
-      alert("Profile updated successfully!");
-    } else alert(result.message);
-  } catch (err) { alert("Error updating profile"); }
-});
+
+  const r = await fetch("http://localhost/naivas_portal/backend/updateProfile.php", {
+    method: "POST", headers: { "Content-Type":"application/json" },
+    body: JSON.stringify(data)
+  });
+
+  const res = await r.json();
+  if (res.success) {
+    user.SupplierName = data.name;
+    user.phone = data.phone;
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    alert("Profile updated!");
+    loadProfile();
+  } else alert(res.message);
+};
+
+// Reset Password
+resetPasswordForm.onsubmit = async e => {
+  e.preventDefault();
+  if (newPassword.value !== confirmPassword.value) return alert("Passwords do not match!");
+
+  const body = {
+    email: user.email,
+    oldPassword: oldPassword.value,
+    newPassword: newPassword.value
+  };
+
+  const r = await fetch("http://localhost/naivas_portal/backend/resetPassword.php", {
+    method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(body)
+  });
+
+  const res = await r.json();
+  alert(res.message);
+};
 
 // Delete Account
-document.getElementById("deleteAccount").addEventListener("click", async () => {
-  if (!confirm("Are you sure you want to delete your account? This is permanent.")) return;
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/deleteAccount.php", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ email: user.email })
-    });
-    const result = await res.json();
-    if (result.success) {
-      localStorage.clear();
-      alert("Account deleted successfully!");
-      window.location.href = "signin.html";
-    } else alert(result.message);
-  } catch (err) { alert("Error deleting account"); }
-});
+deleteAccount.onclick = async () => {
+  if (!confirm("Delete your account permanently?")) return;
+
+  const r = await fetch("http://localhost/naivas_portal/backend/deleteAccount.php", {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ email: user.email })
+  });
+  const res = await r.json();
+
+  if (res.success) {
+    localStorage.clear();
+    alert("Account deleted.");
+    location.href = "signin.html";
+  } else alert(res.message);
+};
 </script>
 
 </body>

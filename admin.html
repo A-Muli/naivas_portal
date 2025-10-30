@@ -1,148 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Naivas Bookings</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .container {
-      margin-top: 50px;
-    }
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .status-pending {
-      color: #856404;
-      background: #fff3cd;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 0.9em;
-    }
-    .status-approved {
-      color: #155724;
-      background: #d4edda;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 0.9em;
-    }
-    .status-rejected {
-      color: #721c24;
-      background: #f8d7da;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 0.9em;
-    }
-    .ba-table td {
-      vertical-align: middle;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2 class="mb-4 text-center text-primary">Admin Dashboard - Activation Management</h2>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Naivas Admin Dashboard</title>
 
-    <div id="bookingsContainer">
-      <p class="text-center text-muted">Loading bookings...</p>
-    </div>
+<!-- BOOTSTRAP -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- ICONS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  body {
+    background: #f6f7fb;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  /* NAVBAR BLACK */
+  .navbar {
+    background: #000000 !important;
+  }
+
+  .navbar-brand img {
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  /* Tabs in Naivas theme */
+  .nav-tabs .nav-link.active {
+    background: #2e8b57 !important;
+    color: #fff !important;
+  }
+
+  .nav-tabs .nav-link {
+    font-weight: 600;
+    color: #ff8c00;
+  }
+
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+  }
+
+  .pending { background:#fff3cd; color:#856404; }
+  .approved { background:#d4edda; color:#155724; }
+  .rejected { background:#f8d7da; color:#721c24; }
+
+  .section-title {
+    font-weight: 700; 
+    color: #2e8b57; 
+    margin-bottom: 15px;
+  }
+
+  .title-orange { color:#ff8c00; }
+
+</style>
+</head>
+
+<body>
+
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark px-3" style="background:#0b3d91;">
+  
+  <!-- Left: Logo -->
+  <div class="d-flex align-items-center">
+    <img src="images/logo.png" alt="Naivas Logo" style="height:35px; margin-right:10px;">
   </div>
 
-  <script>
-    async function loadBookings() {
-      const container = document.getElementById("bookingsContainer");
-      container.innerHTML = "<p class='text-center text-muted'>Loading...</p>";
+  <!-- Center: Dashboard Title -->
+  <div class="mx-auto text-center">
+    <span class="navbar-brand fw-bold m-0" style="font-size:20px;">Naivas Admin Dashboard</span>
+  </div>
 
-      try {
-        const res = await fetch("http://localhost/naivas_portal/backend/getbooking.php");
-        if (!res.ok) throw new Error("Failed to load bookings.");
-        const bookings = await res.json();
+  <!-- Right: Logout Button -->
+  <div class="d-flex align-items-center">
+    <button onclick="logout()" style="padding:8px 15px; background:#ff8c00; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+      Logout
+    </button>
+  </div>
 
-        if (bookings.length === 0) {
-          container.innerHTML = "<p class='text-center text-muted'>No bookings found.</p>";
-          return;
-        }
+</nav>
 
-        let html = "";
-        bookings.forEach(b => {
-          const statusClass = b.status === "approved" ? "status-approved"
-                             : b.status === "rejected" ? "status-rejected"
-                             : "status-pending";
+<!-- Welcome Message -->
+<div style="background:#fff; padding:10px; border-bottom:2px solid #fff;">
+  <h5 id="welcomeMsg" class="m-0 fw-bold" style="color:#0b3d91;">Welcome Admin</h5>
+</div>
 
-          html += `
-            <div class="card mb-4">
-              <div class="card-body">
-                <h5 class="card-title">${b.productName} (${b.productType})</h5>
-                <p class="card-text">
-                  <strong>Supplier:</strong> ${b.supplierEmail}<br>
-                  <strong>Store:</strong> ${b.storeName}<br>
-                  <strong>Category:</strong> ${b.productCategory}<br>
-                  <strong>Activation Date:</strong> ${b.activationDate}<br>
-                  <strong>Status:</strong> <span class="${statusClass}">${b.status}</span>
-                </p>
-                <h6>Brand Ambassadors:</h6>
-                ${b.brandAmbassadors && b.brandAmbassadors.length > 0 ? `
-                  <table class="table table-sm table-bordered ba-table">
-                    <thead>
-                      <tr><th>Name</th><th>ID Number</th><th>Phone</th></tr>
-                    </thead>
-                    <tbody>
-                      ${b.brandAmbassadors.map(ba => `
-                        <tr>
-                          <td>${ba.name}</td>
-                          <td>${ba.idNumber}</td>
-                          <td>${ba.phoneNumber}</td>
-                        </tr>
-                      `).join("")}
-                    </tbody>
-                  </table>
-                ` : `<p class="text-muted">No Brand Ambassadors listed.</p>`}
-                
-                ${b.status === "pending" ? `
-                <div class="mt-3">
-                    <button class="btn btn-success btn-sm me-2" onclick="updateStatus(${b.id}, 'approve')">Approve</button>
-                    <button class="btn btn-danger btn-sm" onclick="updateStatus(${b.id}, 'reject')">Reject</button>
-                </div>
-                ` : ""}
-              </div>
-            </div>
-          `;
-        });
 
-        container.innerHTML = html;
 
-      } catch (err) {
-        container.innerHTML = `<p class='text-danger text-center'>Error loading bookings: ${err.message}</p>`;
-      }
-    }
+<div class="container py-4">
 
-    async function updateStatus(bookingId, action) {
-      if (!confirm(`Are you sure you want to ${action} this booking?`)) return;
+<ul class="nav nav-tabs mb-4" id="adminTabs">
+  <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#pendingTab">Pending</a></li>
+  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reviewedTab">Reviewed</a></li>
+  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#suppliersTab">Suppliers</a></li>
+  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#baTab">Brand Ambassadors</a></li>
+  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#storesTab">Stores</a></li>
+</ul>
 
-      try {
-        const res = await fetch("http://localhost/naivas_portal/backend/approvereject.php", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ bookingId, action })
+<div class="tab-content">
 
-        });
-        const result = await res.json();
+<!-- Pending -->
+<div class="tab-pane fade show active" id="pendingTab">
+  <h5 class="section-title">Pending Activations</h5>
+  <div id="pendingContainer" class="row g-3"></div>
+</div>
 
-        if (result.success) {
-          alert(`Booking ${action}ed successfully.`);
-          loadBookings();
-        } else {
-          alert("Error: " + result.message);
-        }
-      } catch (err) {
-        alert("Request failed: " + err.message);
-      }
-    }
+<!-- Reviewed -->
+<div class="tab-pane fade" id="reviewedTab">
+  <h5 class="section-title">Reviewed Activations</h5>
 
-    loadBookings();
-  </script>
+  <div class="row">
+    <div class="col-md-6">
+      <h6 class="title-orange">Approved</h6>
+      <div id="approvedContainer" class="row g-3 border rounded p-2"></div>
+    </div>
+
+    <div class="col-md-6">
+      <h6 class="text-danger">Rejected</h6>
+      <div id="rejectedContainer" class="row g-3 border rounded p-2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Suppliers -->
+<div class="tab-pane fade" id="suppliersTab">
+  <h5 class="section-title">Suppliers</h5>
+  <div id="suppliersContainer" class="table-responsive"></div>
+</div>
+
+<!-- BAs -->
+<div class="tab-pane fade" id="baTab">
+  <h5 class="section-title">Brand Ambassadors</h5>
+  <div id="baContainer" class="table-responsive"></div>
+</div>
+
+<!-- Stores -->
+<div class="tab-pane fade" id="storesTab">
+  <h5 class="section-title">Stores</h5>
+  <div id="storesContainer" class="table-responsive"></div>
+</div>
+
+</div> 
+</div>
+
+<script>
+
+
+document.getElementById("welcomeMsg").innerText =
+  "Welcome " + (localStorage.getItem("adminName") || "Admin");
+
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  localStorage.removeItem("adminName");
+  window.location = "signin.html";
+}
+
+
+
+async function loadData() {
+  loadPendingActivations();
+  loadReviewed();
+  loadSuppliers();
+  loadBAs();
+  loadStores();
+}
+
+/* LOAD PENDING */
+async function loadPendingActivations() {
+  const container = document.getElementById("pendingContainer");
+  container.innerHTML = "Loading...";
+
+  let res = await fetch("backend/getbooking.php");
+  let data = await res.json();
+  data = data.filter(i => i.status === "pending");
+
+  container.innerHTML = data.length ? "" : "<p>No pending activations.</p>";
+
+  data.forEach(b => container.innerHTML += cardTemplate(b, true));
+}
+
+/* LOAD APPROVED + REJECTED */
+async function loadReviewed() {
+  const approvedDiv = document.getElementById("approvedContainer");
+  const rejectedDiv = document.getElementById("rejectedContainer");
+
+  approvedDiv.innerHTML = rejectedDiv.innerHTML = "Loading...";
+
+  let res = await fetch("backend/getbooking.php");
+  let data = await res.json();
+
+  approvedDiv.innerHTML = rejectedDiv.innerHTML = "";
+
+  data.filter(i => i.status === "approved").forEach(b => {
+    approvedDiv.innerHTML += cardTemplate(b, false);
+  });
+
+  data.filter(i => i.status === "rejected").forEach(b => {
+    rejectedDiv.innerHTML += cardTemplate(b, false);
+  });
+}
+
+/* SUPPLIERS */
+async function loadSuppliers() {
+  let res = await fetch("backend/getsuppliers.php");
+  let result = await res.json();
+  let data = result.data || [];
+
+  document.getElementById("suppliersContainer").innerHTML =
+  `<table class="table table-bordered">
+    <thead class="table-warning">
+      <tr><th>Name</th><th>Email</th><th>Company</th><th>Phone</th></tr>
+    </thead>
+    <tbody>${data.map(s=>`
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.email}</td>
+        <td>${s.company}</td>
+        <td>${s.phone}</td>
+      </tr>
+    `).join("")}</tbody>
+  </table>`;
+}
+
+/* BAs */
+async function loadBAs() {
+  let res = await fetch("backend/getbas.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "" })
+  });
+
+  let result = await res.json();
+  let data = result.data || [];
+
+  document.getElementById("baContainer").innerHTML =
+  `<table class="table table-bordered">
+    <thead class="table-success">
+      <tr><th>Name</th><th>ID</th><th>Phone</th><th>Supplier</th></tr>
+    </thead>
+    <tbody>${data.map(b=>`
+      <tr>
+        <td>${b.name}</td><td>${b.idNumber}</td><td>${b.phoneNumber}</td><td>${b.supplierEmail}</td>
+      </tr>
+    `).join("")}</tbody>
+  </table>`;
+}
+
+/* STORES */
+async function loadStores() {
+  let res = await fetch("backend/getstores.php");
+  let json = await res.json();
+  let stores = json.data;
+
+  document.getElementById("storesContainer").innerHTML =
+  `<table class="table table-bordered">
+    <thead class="table-info">
+      <tr><th>Store Name</th><th>Region</th></tr>
+    </thead>
+    <tbody>${stores.map(s=>`
+      <tr><td>${s.storeName}</td><td>${s.region}</td></tr>
+    `).join("")}</tbody>
+  </table>`;
+}
+
+/* CARD UI */
+function cardTemplate(b, showActions) {
+  return `
+  <div class="col-md-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h6 class="text-success">${b.productName} (${b.productType})</h6>
+        <p style="font-size:0.9rem;">
+          <strong>Store:</strong> ${b.storeName}<br>
+          <strong>Supplier:</strong> ${b.supplierEmail}<br>
+          <strong>Date:</strong> ${b.activationDate}<br>
+          <strong>Status:</strong> <span class="status-badge ${b.status}">${b.status}</span>
+        </p>
+        ${showActions ? `
+          <button class="btn btn-success btn-sm" onclick="updateStatus(${b.id},'approve')">Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="updateStatus(${b.id},'reject')">Reject</button>
+        ` : ""}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ACTION BUTTONS */
+async function updateStatus(id, action) {
+  if(!confirm(`Confirm to ${action} this activation?`)) return;
+  let res = await fetch("backend/approvereject.php", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ bookingId:id, action })
+  });
+
+  let out = await res.json();
+  alert(out.success ? "Updated!" : out.message);
+  loadData();
+}
+
+loadData();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
