@@ -1,110 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Naivas Portal - Dashboard</title>
 <style>
-  body {
+  /* --- FIX FOR FULL-HEIGHT BACKGROUND --- */
+  html, body {
+    height: 100%;
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f6f8;
+  }
+
+  /* Base Styles (Sans Serif for Professional Look) */
+  body {
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100%;
+
+  }
+
+
+  h2, h3, h4 { margin-top: 0; font-weight: 600; }
+
+  /* Layout */
+  #navbar-placeholder { margin-bottom: 2rem; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1rem;
+  }
+
+  /* Shared Card/Section Styles */
+  .section-card {
+    background: white; 
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+  }
+
+  /* --- WELCOME (PROFESSIONAL LOOK) --- */
+  .welcome {
+    background: linear-gradient(90deg, #f7f7f7, #ffffff);
+    color: #333;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border-left: 6px solid #4bb300;
+  }
+  .welcome h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #4bb300;
+  }
+  .welcome h2 span {
+    color: #222;
+  }
+
+  .welcome-details {
+    padding-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .welcome p {
+    margin: 0.2rem 0;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  .welcome p strong {
+    font-weight: 600;
+    min-width: 90px;
+    display: inline-block;
     color: #333;
   }
-  header { background: #000; padding: 0.8rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;}
-  .header-container { display: flex; align-items: center; justify-content: space-between; }
-  .logo img { height: 45px; }
-  .nav-right { display: flex; align-items: center; gap: 2rem; }
-  nav ul { list-style: none; display: flex; gap: 1.5rem; margin: 0; padding: 0; }
-  nav ul li a { text-decoration: none; color: white; font-weight: bold; font-size: 1rem; transition: color 0.3s; }
-  nav ul li a:hover { color: #f58220; }
-  .logout-btn { background: #f58220; color: white; border: none; border-radius: 6px; padding: 0.6rem 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
-  .logout-btn:hover { background: #4bb300; }
-  .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-  .welcome { background: linear-gradient(to right, #f58220, #4bb300); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-  .welcome h2 { margin: 0; font-size: 1.8rem; }
-  .booking-section { margin-top: 2rem; background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
-  .book-btn { background: #f58220; color: white; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-  .book-btn:hover { background: #4bb300; }
-  .activations { margin-top: 2rem; }
+  .welcome .tagline {
+      font-size: 1rem;
+      margin-top: 1.5rem;
+      font-style: italic;
+      color: #777;
+  }
+
+  /* --- SYSTEM INTRO --- */
+  .intro-section {
+    border-left: 6px solid #f58220;
+  }
+  .intro-section h2 { color: #f58220; font-weight: 700; font-size: 1.6rem; margin-bottom: 0.8rem; }
+  .intro-section p { font-size: 1.0rem; color: #444; line-height: 1.6; max-width: 800px; }
+  .intro-section ul { line-height: 1.7; font-size: 1rem; padding-left: 20px; color: #333; margin: 20px 0 14px; }
+
+  /* Buttons */
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .action-btn {
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    min-width: 200px;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .btn-primary {
+    background: #4bb300;
+  }
+  .btn-primary:hover {
+    background: #3a8e00;
+  }
+  .btn-secondary {
+    background: #f58220;
+  }
+  .btn-secondary:hover {
+    background: #d96f10;
+  }
+
+  /* --- ACTIVATIONS CARDS --- */
+  .activations {
+    margin-bottom: 3rem;
+  }
+  .activations h3, .ba-section h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.5rem;
+  }
   .cards { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
-  .card { flex: 1; min-width: 280px; background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 3px 6px rgba(0,0,0,0.08); text-align: center; cursor: pointer; transition: transform 0.2s; }
-  .card:hover { transform: scale(1.03); }
-  .approved { border-left: 6px solid #4bb300; }
-  .pending { border-left: 6px solid #f58220; }
-  .rejected { border-left: 6px solid #e74c3c; }
-  .ba-section { margin-top: 3rem; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 3px 6px rgba(0,0,0,0.08); }
-  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-  th, td { border: 1px solid #ddd; padding: 0.8rem; text-align: center; }
-  th { background: #4bb300; color: white; }
-  tr:nth-child(even) { background: #f9f9f9; }
-  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 2000; }
-  .modal-content { background: white; width: 90%; max-width: 800px; border-radius: 10px; padding: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease-in-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f58220; padding-bottom: 0.5rem; }
-  .modal-header h3 { margin: 0; color: #000; }
-  .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #f58220; }
+  .card {
+    flex: 1;
+    min-width: 250px;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .card h4 { font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700; }
+  .card p { font-size: 1.8rem; font-weight: 800; margin: 0; }
+  .approved { border-left: 4px solid #4bb300; }
+  .pending { border-left: 4px solid #f58220; }
+  .rejected { border-left: 4px solid #e74c3c; }
+
+  /* --- BA TABLE --- */
+  .ba-section {
+    /* Inherits .section-card for clean look */
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+  th, td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #eee; }
+  th { background: #4bb300; color: white; font-weight: 700; border-right: none; }
+  tr:nth-child(even) { background: #fcfcfc; }
+  tr:hover { background: #f0f0f0; }
+  td { border-right: none; }
+  tr:last-child td { border-bottom: none; }
+
+  /* --- MODAL --- */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  .modal-content {
+    background: white;
+    width: 90%;
+    max-width: 900px;
+    max-height: 80vh;
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-y: auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  @keyframes fadeIn { from {opacity:0; transform:scale(0.95);} to {opacity:1; transform:scale(1);} }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .modal-header h3 { margin: 0; font-size: 1.5rem; color: #333; }
+  .close-btn { background:none; border:none; font-size:1.5rem; cursor:pointer; color:#f58220; transition: color 0.2s; }
+  .close-btn:hover { color: #d96f10; }
+
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-container">
-    <div class="logo"><img src="images/logo.png" alt="Naivas Logo"></div>
-    <div class="nav-right">
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a href="profile.html">Profile</a></li>
-        </ul>
-      </nav>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
-  </div>
-</header>
+<div id="navbar-placeholder"></div>
 
 <div class="container">
-  <section class="welcome">
-    <h2>Welcome back, <span id="userName">User</span> 👋</h2>
-    <p><strong>Company:</strong> <span id="companyName">-</span></p>
-    <p><strong>Email:</strong> <span id="email">-</span></p>
-  </section>
 
-  <section class="booking-section">
-    <h3>Ready to book your next activation?</h3>
-    <button class="book-btn" onclick="window.location.href='booking.html'">Book Activation</button>
-  </section>
+<section class="welcome">
+  <h2>
+    Welcome, <span id="userName">User</span> 👋
+  </h2>
 
-  <section class="activations">
-    <h3>My Activations Overview</h3>
-    <div class="cards">
-      <div class="card approved" id="approvedCard">
-        <h4>Approved Activations</h4>
-        <p id="approvedCount">0</p>
-      </div>
-      <div class="card pending" id="pendingCard">
-        <h4>Pending Activations</h4>
-        <p id="pendingCount">0</p>
-      </div>
-      <div class="card rejected" id="rejectedCard">
-        <h4>Rejected Activations</h4>
-        <p id="rejectedCount">0</p>
-      </div>
-    </div>
-  </section>
+  <div class="welcome-details">
+    <p>
+      <strong>Company:</strong> <span id="companyName">-</span>
+    </p>
+    <p>
+      <strong>Email:</strong> <span id="email">-</span>
+    </p>
+  </div>
 
-  <section class="ba-section">
-    <h3>My Brand Ambassadors</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="baTable"><tr><td colspan="4">Loading...</td></tr></tbody>
-    </table>
-  </section>
+  <p class="tagline">
+    Together, let's build impactful shopper moments across Naivas stores.
+  </p>
+</section>
+
+<section class="section-card intro-section">
+  <h2>
+    Naivas Activation Management Portal
+  </h2>
+
+  <p>
+    Your dedicated platform to plan, request, and manage in–store brand activations across Naivas branches.
+    This system ensures smoother planning, faster approvals, and seamless execution for your marketing campaigns.
+  </p>
+
+  <div>
+    <ul>
+      <li>Access approved activation categories & guidelines</li>
+      <li>Schedule store activations and track approval status</li>
+      <li>Manage Brand Ambassador submissions</li>
+      <li>Review past activation performance</li>
+    </ul>
+  </div>
+
+  <div class="button-group">
+
+    <button class="action-btn btn-primary" onclick="window.location.href='categories.html'">
+       View Activation Categories
+    </button>
+
+    <button class="action-btn btn-secondary" onclick="window.location.href='booking.html'">
+       Book Store Activation
+    </button>
+
+  </div>
+</section>
+
+<section class="activations">
+  <h3>My Activations Overview</h3>
+  <div class="cards">
+    <div class="card approved" id="approvedCard"><h4>Approved</h4><p id="approvedCount">0</p></div>
+    <div class="card pending" id="pendingCard"><h4>Pending</h4><p id="pendingCount">0</p></div>
+    <div class="card rejected" id="rejectedCard"><h4>Rejected</h4><p id="rejectedCount">0</p></div>
+  </div>
+</section>
+
+<section class="section-card ba-section">
+  <h3>My Brand Ambassadors</h3>
+  <table>
+    <thead><tr><th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th></tr></thead>
+    <tbody id="baTable"><tr><td colspan="4">Loading...</td></tr></tbody>
+  </table>
+</section>
 </div>
 
 <div class="modal" id="activationModal">
@@ -114,131 +293,107 @@
       <button class="close-btn" id="closeModal">&times;</button>
     </div>
     <table>
-      <thead>
-        <tr>
-          <th>Store Name</th><th>Product Category</th><th>Product Type</th><th>Product Name</th><th>Activation Date</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Store Name</th><th>Category</th><th>Type</th><th>Product</th><th>Date</th></tr></thead>
       <tbody id="activationDetails"><tr><td colspan="5">Loading...</td></tr></tbody>
     </table>
   </div>
 </div>
 
 <script>
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
-if (!user) {
-  alert("Please log in first!");
-  window.location.href = "signin.html";
-} else {
-  document.getElementById("userName").textContent = user.SupplierName || "User";
-  document.getElementById("companyName").textContent = user.CompanyName || "Not provided";
-  document.getElementById("email").textContent = user.email || "-";
-}
+/* --- LOAD NAVBAR --- */
+fetch("navbar.html")
+  .then(res=>res.text())
+  .then(html=>{
+    document.getElementById("navbar-placeholder").innerHTML=html;
+    const user=JSON.parse(localStorage.getItem("loggedInUser"));
+    const nameEl=document.getElementById("profileName");
+    const picEl=document.getElementById("profilePic");
+    const dropdown=document.querySelector(".profile-dropdown");
+    const trigger=document.querySelector(".profile-trigger");
+    const logoutLink=document.getElementById("logoutLink");
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "signin.html";
-});
-
-let activations = [];
-
-async function loadActivations() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/get_activations.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const resData = await res.json();
-    if (!resData.success || !Array.isArray(resData.data)) {
-      console.error("No activations found");
-      return;
-    }
-    activations = resData.data;
-
-    const approved = activations.filter(a => a.status.toLowerCase() === "approved");
-    const pending = activations.filter(a => a.status.toLowerCase() === "pending");
-    const rejected = activations.filter(a => a.status.toLowerCase() === "rejected");
-
-    document.getElementById("approvedCount").textContent = approved.length;
-    document.getElementById("pendingCount").textContent = pending.length;
-    document.getElementById("rejectedCount").textContent = rejected.length;
-  } catch (err) {
-    console.error("Error loading activations:", err);
-  }
-}
-
-const modal = document.getElementById("activationModal");
-document.getElementById("closeModal").onclick = () => modal.style.display = "none";
-window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
-
-function openModal(status) {
-  const filtered = activations.filter(a => a.status.toLowerCase() === status);
-  const titleMap = { approved: "Approved Activations", pending: "Pending Activations", rejected: "Rejected Activations" };
-  document.getElementById("modalTitle").textContent = titleMap[status];
-  const tbody = document.getElementById("activationDetails");
-  tbody.innerHTML = "";
-
-  if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="5">No ${status} activations found.</td></tr>`;
-  } else {
-    filtered.forEach(act => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${act.storeName}</td>
-        <td>${act.productCategory}</td>
-        <td>${act.productType}</td>
-        <td>${act.productName}</td>
-        <td>${act.activationDate}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-  modal.style.display = "flex";
-}
-
-document.getElementById("approvedCard").onclick = () => openModal("approved");
-document.getElementById("pendingCard").onclick = () => openModal("pending");
-document.getElementById("rejectedCard").onclick = () => openModal("rejected");
-
-async function loadBAs() {
-  try {
-    const res = await fetch("http://localhost/naivas_portal/backend/getBAs.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email })
-    });
-    const response = await res.json();
-    const tbody = document.getElementById("baTable");
-    tbody.innerHTML = "";
-
-    if (!response.success || !Array.isArray(response.data) || response.data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4">No BAs found.</td></tr>';
-      return;
+    if(user){
+      if(nameEl) nameEl.textContent=user.SupplierName||"User";
+      if(picEl && user.profilePic) picEl.src=user.profilePic;
+      document.getElementById("userName").textContent=user.SupplierName||"User";
+      document.getElementById("companyName").textContent=user.CompanyName||"-";
+      document.getElementById("email").textContent=user.email||"-";
     }
 
-    response.data.forEach(ba => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${ba.name}</td>
-        <td>${ba.idNumber}</td>
-        <td>${ba.phoneNumber}</td>
-        <td>${ba.status}</td>
-      `;
-      tbody.appendChild(tr);
+    if (trigger && dropdown) trigger.addEventListener("click",()=>dropdown.classList.toggle("active"));
+    window.addEventListener("click",e=>{
+        if(dropdown && trigger && !dropdown.contains(e.target) && !trigger.contains(e.target)) {
+            dropdown.classList.remove("active");
+        }
     });
-  } catch (err) {
-    console.error("Error loading BAs:", err);
-    document.getElementById("baTable").innerHTML =
-      '<tr><td colspan="4" style="color:red;">Error loading data</td></tr>';
-  }
+    if (logoutLink) logoutLink.addEventListener("click",e=>{ e.preventDefault(); localStorage.clear(); window.location.href="signin.html"; });
+  });
+
+const user=JSON.parse(localStorage.getItem("loggedInUser"));
+if(!user){ window.location="signin.html"; }
+
+let activations=[];
+async function loadActivations(){
+  try{
+    const res=await fetch("backend/get_activations.php",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:user.email}) });
+    const resData=await res.json();
+    if(!resData.success || !Array.isArray(resData.data)) return;
+    activations=resData.data;
+
+    const approved=activations.filter(a=>a.status.toLowerCase()==="approved");
+    const pending=activations.filter(a=>a.status.toLowerCase()==="pending");
+    const rejected=activations.filter(a=>a.status.toLowerCase()==="rejected");
+
+    document.getElementById("approvedCount").textContent=approved.length;
+    document.getElementById("pendingCount").textContent=pending.length;
+    document.getElementById("rejectedCount").textContent=rejected.length;
+  }catch(err){ console.error("Error loading activations:", err); }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadActivations();
-  loadBAs();
-});
+const modal=document.getElementById("activationModal");
+if (document.getElementById("closeModal")) {
+  document.getElementById("closeModal").onclick=()=>modal.style.display="none";
+}
+window.onclick=e=>{if(e.target===modal) modal.style.display="none";}
+
+function openModal(status){
+  const filtered=activations.filter(a=>a.status.toLowerCase()===status);
+  const titleMap={approved:"Approved Activations", pending:"Pending Activations", rejected:"Rejected Activations"};
+  document.getElementById("modalTitle").textContent=titleMap[status];
+  const tbody=document.getElementById("activationDetails");
+  tbody.innerHTML="";
+  if(!filtered.length) tbody.innerHTML=`<tr><td colspan="5">No ${status} activations</td></tr>`;
+  else filtered.forEach(act=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${act.storeName || 'N/A'}</td><td>${act.productCategory || 'N/A'}</td><td>${act.productType || 'N/A'}</td><td>${act.productName || 'N/A'}</td><td>${act.activationDate || 'N/A'}</td>`;
+    tbody.appendChild(tr);
+  });
+  modal.style.display="flex";
+}
+
+if (document.getElementById("approvedCard")) document.getElementById("approvedCard").onclick=()=>openModal("approved");
+if (document.getElementById("pendingCard")) document.getElementById("pendingCard").onclick=()=>openModal("pending");
+if (document.getElementById("rejectedCard")) document.getElementById("rejectedCard").onclick=()=>openModal("rejected");
+
+async function loadBAs(){
+  try{
+    const res=await fetch("backend/getBAs.php",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:user.email}) });
+    const response=await res.json();
+    const tbody=document.getElementById("baTable");
+    tbody.innerHTML="";
+    if(!response.success || !Array.isArray(response.data) || response.data.length===0) {
+      tbody.innerHTML='<tr><td colspan="4">No BAs found</td></tr>';
+      return;
+    }
+    response.data.forEach(ba=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td>${ba.name || 'N/A'}</td><td>${ba.idNumber || 'N/A'}</td><td>${ba.phoneNumber || 'N/A'}</td><td>${ba.status || 'N/A'}</td>`;
+      tbody.appendChild(tr);
+    });
+  }catch(err){ console.error("Error loading BAs:", err); document.getElementById("baTable").innerHTML='<tr><td colspan="4" style="color:red;">Error loading data</td></tr>'; }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{ loadActivations(); loadBAs(); });
 </script>
-
 </body>
 </html>

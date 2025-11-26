@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Store Manager Dashboard</title>
+
+<!-- ✅ FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<style>
+body {
+  font-family: Arial, sans-serif; background: #F5F7FA; margin: 0;
+}
+header {
+  background: #4BB300; padding: 15px; color: white; display:flex; justify-content:space-between;
+}
+button {
+  background: #F6A800; border:none; padding:10px 16px; cursor:pointer; border-radius:5px; color:white;
+}
+.container { padding: 20px; }
+table { width:100%; border-collapse: collapse; margin-top:15px; }
+th, td { border:1px solid #ddd; padding:10px; text-align:center; }
+th { background:#4BB300; color:white; }
+.status-pending { color:orange; font-weight:bold; }
+.status-approved { color:green; font-weight:bold; }
+.status-declined { color:red; font-weight:bold; }
+
+/* ✅ Calendar panel */
+#calendar {
+  max-width: 1000px;
+  margin: 30px auto;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Store Manager Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+  <h3>Your Store Activations</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Supplier</th>
+        <th>Product</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>No. of BAs</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="activationList">
+      <tr><td colspan="6">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:30px;">Store Calendar View</h3>
+  <div id="calendar"></div>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user || user.role !== "manager") window.location.href = "signin.html";
+
+async function loadData() {
+  const res = await fetch("http://localhost/naivas_portal/backend/manageractivations.php?store=" + user.storeName);
+  const data = await res.json();
+  
+  let rows = "";
+  data.forEach(a => {
+    rows += `
+      <tr>
+        <td>${a.supplierEmail}</td>
+        <td>${a.productName}</td>
+        <td>${a.productCategory}</td>
+        <td>${a.activationDate}</td>
+        <td>${a.no_of_BAs}</td>
+        <td class="status-${a.status}">${a.status}</td>
+      </tr>`;
+  });
+  document.getElementById("activationList").innerHTML = rows;
+}
+
+// ✅ Load Calendar Events (pending + approved only)
+async function loadCalendar() {
+  const res = await fetch(`http://localhost/naivas_portal/backend/calendaractivations.php?store=${encodeURIComponent(user.storeName)}`);
+  const events = await res.json();
+
+  const calendarEvents = events.map(a => ({
+    title: `${a.productName} (${a.no_of_BAs} BA) - ${a.status}`,
+    start: a.activationDate,
+    backgroundColor: a.status === "pending" ? "orange" : "green",
+    borderColor: "#000",
+  }));
+
+  const calendarEl = document.getElementById('calendar');
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    events: calendarEvents
+  });
+
+  calendar.render();
+}
+
+function logout(){ localStorage.clear(); window.location.href="signin.html"; }
+
+loadData();
+loadCalendar();
+</script>
+
+</body>
+</html>

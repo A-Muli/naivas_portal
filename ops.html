@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Operations Dashboard</title>
+<style>
+body { font-family:Arial; background:#FFF; margin:0;}
+header{background:#4BB300;color:white;padding:15px;display:flex;justify-content:space-between;}
+button{padding:6px 10px; border:none; cursor:pointer; border-radius:4px;}
+.btn-approve{background:#28a745;color:white;}
+.btn-decline{background:#d9534f;color:white;}
+.container{padding:20px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:8px;text-align:center;}
+th{background:#4BB300;color:white;}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Operations Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+  <h3>All Activations</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Store</th><th>Supplier</th><th>Product</th>
+        <th>Category</th><th>Date</th><th>BAs</th>
+        <th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="opsTable"><tr><td colspan="8">Loading...</td></tr></tbody>
+  </table>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user || user.role !== "operations") window.location.href="signin.html";
+
+async function loadOPS() {
+  const res = await fetch("http://localhost/naivas_portal/backend/get_all_activations.php");
+  const data = await res.json();
+
+  let rows="";
+  data.forEach(a=>{
+    rows += `
+    <tr>
+      <td>${a.storeName}</td>
+      <td>${a.supplierEmail}</td>
+      <td>${a.productName}</td>
+      <td>${a.productCategory}</td>
+      <td>${a.activationDate}</td>
+      <td>${a.no_of_BAs}</td>
+      <td>${a.status}</td>
+      <td>
+        <button class="btn-approve" onclick="updateStatus(${a.id},'approved')">Approve</button>
+        <button class="btn-decline" onclick="updateStatus(${a.id},'declined')">Decline</button>
+      </td>
+    </tr>`;
+  });
+  document.getElementById("opsTable").innerHTML = rows;
+}
+
+async function updateStatus(id,status){
+  await fetch("http://localhost/naivas_portal/backend/approvereject.php",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json"},
+    body:JSON.stringify({id,status})
+  });
+  loadOPS();
+}
+function logout(){localStorage.clear(); window.location.href="signin.html";}
+loadOPS();
+</script>
+
+</body>
+</html>

@@ -16,7 +16,7 @@
     }
 
     .signup-container {
-      background: rgba(255, 255, 255, 0.6); /* White with 90% opacity */
+      background: rgba(255, 255, 255, 0.6);
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -58,7 +58,7 @@
       </div>
 
       <div class="form-group">
-        <label for="CompanyName">Company name</label>
+        <label for="CompanyName">Company Name</label>
         <input type="text" id="CompanyName" placeholder="Name of your company" required>
       </div>
 
@@ -85,7 +85,7 @@
     </form>
   </div>
 
- <script>
+<script>
   const form = document.getElementById("signupForm");
 
   form.addEventListener("submit", async (e) => {
@@ -104,7 +104,8 @@
       email: document.getElementById("email").value,
       CompanyName: document.getElementById("CompanyName").value,
       PhoneNumber: document.getElementById("PhoneNumber").value,
-      password: password
+      password: password,
+      role: "supplier" // ✅ Always supplier at signup
     };
 
     try {
@@ -115,11 +116,10 @@
       });
 
       const result = await res.json();
-      if (!res.ok || !result.success) throw new Error(result.message);
+      if (!result.success) throw new Error(result.message);
 
-      alert("Signup successful! Redirecting...");
+      alert("Signup successful! Logging you in...");
 
-      // ✅ Automatically log them in after signup
       const loginRes = await fetch("http://localhost/naivas_portal/backend/signin.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -127,17 +127,11 @@
       });
 
       const loginResult = await loginRes.json();
-      if (!loginRes.ok || !loginResult.success) throw new Error(loginResult.message);
+      if (!loginResult.success) throw new Error(loginResult.message);
 
-      // ✅ Save user data
       localStorage.setItem("loggedInUser", JSON.stringify(loginResult.user));
 
-      // ✅ Redirect based on role
-      if (loginResult.user.role === "admin") {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "index.html";
-      }
+      window.location.href = "index.html"; // ✅ Supplier lands on index
 
     } catch (err) {
       alert("Error: " + err.message);
@@ -145,7 +139,6 @@
     }
   });
 </script>
-
 
 </body>
 </html>

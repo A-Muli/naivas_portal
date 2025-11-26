@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Activation Calendar</title>
+<style>
+body{font-family:Arial;margin:0;background:#f6fbf4;}
+header{background:#4BB300;padding:15px;color:white;text-align:center;}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:10px;}
+.day{background:white;border:1px solid #ddd;padding:10px;min-height:120px;}
+.activation{background:#F6A800;color:white;padding:2px 5px;margin-top:5px;border-radius:4px;font-size:12px;}
+</style>
+</head>
+<body>
+
+<header><h2>Weekly Calendar View</h2></header>
+
+<div class="calendar" id="calendar"></div>
+
+<script>
+const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const container=document.getElementById("calendar");
+days.forEach(d=>container.innerHTML+=`<div class='day'><strong>${d}</strong><div id="${d}"></div></div>`);
+
+async function loadCalendar(){
+  const res=await fetch("http://localhost/naivas_portal/backend/calendaractivations.php");
+  const data=await res.json();
+
+  data.forEach(a=>{
+    const d=new Date(a.activationDate).toLocaleDateString("en-KE",{weekday:"short"});
+    document.getElementById(d)?.insertAdjacentHTML("beforeend",
+      `<div class='activation'>${a.productName} (${a.no_of_BAs} BA)</div>`
+    );
+  });
+}
+loadCalendar();
+</script>
+
+</body>
+</html>

@@ -28,6 +28,7 @@ if ($user && password_verify($password, $user["password"])) {
 } else {
     echo json_encode(["success" => false, "message" => "Invalid credentials"]);
 }
+
 $stmt->close();
 $conn->close();
 ?>

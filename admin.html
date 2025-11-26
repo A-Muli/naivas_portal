@@ -11,93 +11,54 @@
 <!-- ICONS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<!-- FULLCALENDAR -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
 <style>
-  body {
-    background: #f6f7fb;
-    font-family: "Segoe UI", sans-serif;
-  }
-
-  /* NAVBAR BLACK */
-  .navbar {
-    background: #000000 !important;
-  }
-
-  .navbar-brand img {
-    height: 45px;
-    margin-right: 10px;
-  }
-
-  /* Tabs in Naivas theme */
-  .nav-tabs .nav-link.active {
-    background: #2e8b57 !important;
-    color: #fff !important;
-  }
-
-  .nav-tabs .nav-link {
-    font-weight: 600;
-    color: #ff8c00;
-  }
-
-  .status-badge {
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-  }
-
+  body { background: #f6f7fb; font-family: "Segoe UI", sans-serif; }
+  .navbar { background: #000 !important; }
+  .nav-tabs .nav-link.active { background:#2e8b57 !important; color:white !important; }
+  .nav-tabs .nav-link { font-weight:600; color:#ff8c00; }
+  .status-badge { padding: 5px 10px; border-radius: 12px; font-size: 0.85rem; }
   .pending { background:#fff3cd; color:#856404; }
   .approved { background:#d4edda; color:#155724; }
   .rejected { background:#f8d7da; color:#721c24; }
-
-  .section-title {
-    font-weight: 700; 
-    color: #2e8b57; 
-    margin-bottom: 15px;
-  }
-
+  .section-title { font-weight:700; color:#2e8b57; margin-bottom:15px; }
   .title-orange { color:#ff8c00; }
-
+  #calendar { min-height: 400px; }
 </style>
 </head>
 
 <body>
 
-<!-- Top Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark px-3" style="background:#0b3d91;">
-  
-  <!-- Left: Logo -->
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
   <div class="d-flex align-items-center">
-    <img src="images/logo.png" alt="Naivas Logo" style="height:35px; margin-right:10px;">
+    <img src="images/logo.png" style="height:35px; margin-right:10px;">
   </div>
 
-  <!-- Center: Dashboard Title -->
   <div class="mx-auto text-center">
     <span class="navbar-brand fw-bold m-0" style="font-size:20px;">Naivas Admin Dashboard</span>
   </div>
 
-  <!-- Right: Logout Button -->
   <div class="d-flex align-items-center">
-    <button onclick="logout()" style="padding:8px 15px; background:#ff8c00; color:#fff; border:none; border-radius:4px; cursor:pointer;">
-      Logout
-    </button>
+    <button id="logoutBtn" class="btn btn-warning text-white px-3">Logout</button>
   </div>
-
 </nav>
 
-<!-- Welcome Message -->
-<div style="background:#fff; padding:10px; border-bottom:2px solid #fff;">
-  <h5 id="welcomeMsg" class="m-0 fw-bold" style="color:#0b3d91;">Welcome Admin</h5>
+<div style="background:#fff; padding:10px;">
+  <h5 id="welcomeMsg" class="fw-bold" style="color:#0b3d91;">Welcome Admin</h5>
 </div>
 
-
-
 <div class="container py-4">
-
-<ul class="nav nav-tabs mb-4" id="adminTabs">
+<ul class="nav nav-tabs mb-4">
   <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#pendingTab">Pending</a></li>
   <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reviewedTab">Reviewed</a></li>
   <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#suppliersTab">Suppliers</a></li>
   <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#baTab">Brand Ambassadors</a></li>
   <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#storesTab">Stores</a></li>
+  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#calendarTab">Calendar View</a></li>
 </ul>
 
 <div class="tab-content">
@@ -111,6 +72,13 @@
 <!-- Reviewed -->
 <div class="tab-pane fade" id="reviewedTab">
   <h5 class="section-title">Reviewed Activations</h5>
+
+  <!-- ✅ Excel Export Button Added Here -->
+  <div class="text-end mb-3">
+    <button class="btn btn-success fw-bold" onclick="exportApprovedExcel()">
+      <i class="fa fa-file-excel"></i> Export Approved Activations to Excel
+    </button>
+  </div>
 
   <div class="row">
     <div class="col-md-6">
@@ -128,159 +96,69 @@
 <!-- Suppliers -->
 <div class="tab-pane fade" id="suppliersTab">
   <h5 class="section-title">Suppliers</h5>
-  <div id="suppliersContainer" class="table-responsive"></div>
+  <div id="suppliersContainer"></div>
 </div>
 
 <!-- BAs -->
 <div class="tab-pane fade" id="baTab">
   <h5 class="section-title">Brand Ambassadors</h5>
-  <div id="baContainer" class="table-responsive"></div>
+  <div id="baContainer"></div>
 </div>
 
 <!-- Stores -->
 <div class="tab-pane fade" id="storesTab">
   <h5 class="section-title">Stores</h5>
-  <div id="storesContainer" class="table-responsive"></div>
+  <div id="storesContainer"></div>
 </div>
 
-</div> 
+<!-- Calendar -->
+<div class="tab-pane fade" id="calendarTab">
+  <h5 class="section-title">Activation Calendar</h5>
+  <div id="calendar"></div>
+</div>
+
+</div>
 </div>
 
 <script>
+/* ------------------------- AUTH CHECK ------------------------- */
+const stored = localStorage.getItem("loggedInUser");
+let currentUser = null;
+try { currentUser = stored ? JSON.parse(stored) : null; } catch(e){ currentUser = null; }
 
-
-document.getElementById("welcomeMsg").innerText =
-  "Welcome " + (localStorage.getItem("adminName") || "Admin");
-
-function logout() {
-  localStorage.removeItem("adminLoggedIn");
-  localStorage.removeItem("adminName");
+if (!currentUser || currentUser.role !== "admin") {
+  console.warn("Not logged in as admin. Redirecting to signin.");
   window.location = "signin.html";
 }
 
+document.getElementById("welcomeMsg").innerText = `Welcome ${currentUser.SupplierName || currentUser.email || "Admin"}`;
 
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("loggedInUser");
+  window.location = "signin.html";
+});
 
-async function loadData() {
-  loadPendingActivations();
-  loadReviewed();
-  loadSuppliers();
-  loadBAs();
-  loadStores();
+/* ✅ Excel Export Function */
+function exportApprovedExcel() {
+  window.open("backend/excel.php", "_blank");
 }
 
-/* LOAD PENDING */
-async function loadPendingActivations() {
-  const container = document.getElementById("pendingContainer");
-  container.innerHTML = "Loading...";
-
-  let res = await fetch("backend/getbooking.php");
-  let data = await res.json();
-  data = data.filter(i => i.status === "pending");
-
-  container.innerHTML = data.length ? "" : "<p>No pending activations.</p>";
-
-  data.forEach(b => container.innerHTML += cardTemplate(b, true));
-}
-
-/* LOAD APPROVED + REJECTED */
-async function loadReviewed() {
-  const approvedDiv = document.getElementById("approvedContainer");
-  const rejectedDiv = document.getElementById("rejectedContainer");
-
-  approvedDiv.innerHTML = rejectedDiv.innerHTML = "Loading...";
-
-  let res = await fetch("backend/getbooking.php");
-  let data = await res.json();
-
-  approvedDiv.innerHTML = rejectedDiv.innerHTML = "";
-
-  data.filter(i => i.status === "approved").forEach(b => {
-    approvedDiv.innerHTML += cardTemplate(b, false);
-  });
-
-  data.filter(i => i.status === "rejected").forEach(b => {
-    rejectedDiv.innerHTML += cardTemplate(b, false);
-  });
-}
-
-/* SUPPLIERS */
-async function loadSuppliers() {
-  let res = await fetch("backend/getsuppliers.php");
-  let result = await res.json();
-  let data = result.data || [];
-
-  document.getElementById("suppliersContainer").innerHTML =
-  `<table class="table table-bordered">
-    <thead class="table-warning">
-      <tr><th>Name</th><th>Email</th><th>Company</th><th>Phone</th></tr>
-    </thead>
-    <tbody>${data.map(s=>`
-      <tr>
-        <td>${s.name}</td>
-        <td>${s.email}</td>
-        <td>${s.company}</td>
-        <td>${s.phone}</td>
-      </tr>
-    `).join("")}</tbody>
-  </table>`;
-}
-
-/* BAs */
-async function loadBAs() {
-  let res = await fetch("backend/getbas.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: "" })
-  });
-
-  let result = await res.json();
-  let data = result.data || [];
-
-  document.getElementById("baContainer").innerHTML =
-  `<table class="table table-bordered">
-    <thead class="table-success">
-      <tr><th>Name</th><th>ID</th><th>Phone</th><th>Supplier</th></tr>
-    </thead>
-    <tbody>${data.map(b=>`
-      <tr>
-        <td>${b.name}</td><td>${b.idNumber}</td><td>${b.phoneNumber}</td><td>${b.supplierEmail}</td>
-      </tr>
-    `).join("")}</tbody>
-  </table>`;
-}
-
-/* STORES */
-async function loadStores() {
-  let res = await fetch("backend/getstores.php");
-  let json = await res.json();
-  let stores = json.data;
-
-  document.getElementById("storesContainer").innerHTML =
-  `<table class="table table-bordered">
-    <thead class="table-info">
-      <tr><th>Store Name</th><th>Region</th></tr>
-    </thead>
-    <tbody>${stores.map(s=>`
-      <tr><td>${s.storeName}</td><td>${s.region}</td></tr>
-    `).join("")}</tbody>
-  </table>`;
-}
-
-/* CARD UI */
+/* ------------------------- UTILITIES ------------------------- */
 function cardTemplate(b, showActions) {
   return `
   <div class="col-md-12">
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 mb-2">
       <div class="card-body">
-        <h6 class="text-success">${b.productName} (${b.productType})</h6>
+        <h6 class="text-success">${b.productName} (${b.productType || ''})</h6>
         <p style="font-size:0.9rem;">
           <strong>Store:</strong> ${b.storeName}<br>
           <strong>Supplier:</strong> ${b.supplierEmail}<br>
-          <strong>Date:</strong> ${b.activationDate}<br>
+          <strong>Date:</strong> ${b.activationDate || b.bookingDate || ''}<br>
+          <strong>BAs:</strong> ${b.no_of_BAs || b.numOfBAs || 0}<br>
           <strong>Status:</strong> <span class="status-badge ${b.status}">${b.status}</span>
         </p>
         ${showActions ? `
-          <button class="btn btn-success btn-sm" onclick="updateStatus(${b.id},'approve')">Approve</button>
+          <button class="btn btn-success btn-sm me-1" onclick="updateStatus(${b.id},'approve')">Approve</button>
           <button class="btn btn-danger btn-sm" onclick="updateStatus(${b.id},'reject')">Reject</button>
         ` : ""}
       </div>
@@ -288,18 +166,128 @@ function cardTemplate(b, showActions) {
   </div>`;
 }
 
-/* ACTION BUTTONS */
+/* ------------------------- BACKEND ACTIONS ------------------------- */
 async function updateStatus(id, action) {
-  if(!confirm(`Confirm to ${action} this activation?`)) return;
-  let res = await fetch("backend/approvereject.php", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({ bookingId:id, action })
-  });
+  if (!confirm(`Are you sure you want to ${action} this activation?`)) return;
+  try {
+    const res = await fetch("backend/approvereject.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bookingId: id, action })
+    });
+    const out = await res.json();
+    if (!out.success) throw new Error(out.message || "Update failed");
+    alert("Updated!");
+    loadData();
+  } catch (err) {
+    alert("Update failed: " + err.message);
+  }
+}
 
-  let out = await res.json();
-  alert(out.success ? "Updated!" : out.message);
-  loadData();
+/* ------------------------- LOADERS ------------------------- */
+async function loadPendingActivations() {
+  const container = document.getElementById("pendingContainer");
+  container.innerHTML = "Loading...";
+  try {
+    const res = await fetch("backend/getbooking.php");
+    const data = await res.json();
+    const pending = Array.isArray(data) ? data.filter(i => i.status === "pending") : [];
+    container.innerHTML = pending.length ? pending.map(b => cardTemplate(b, true)).join("") : "<p>No pending activations.</p>";
+  } catch (err) {
+    container.innerHTML = "<p>Error loading pending activations.</p>";
+  }
+}
+
+async function loadReviewed() {
+  try {
+    const res = await fetch("backend/getbooking.php");
+    const data = await res.json();
+    const arr = Array.isArray(data) ? data : [];
+    document.getElementById("approvedContainer").innerHTML = arr.filter(i => i.status === "approved").map(b => cardTemplate(b, false)).join("") || "<p>No approved activations.</p>";
+    document.getElementById("rejectedContainer").innerHTML = arr.filter(i => i.status === "rejected").map(b => cardTemplate(b, false)).join("") || "<p>No rejected activations.</p>";
+  } catch {}
+}
+
+async function loadSuppliers() {
+  try {
+    const res = await fetch("backend/getsuppliers.php");
+    const json = await res.json();
+    const data = json.data || [];
+    document.getElementById("suppliersContainer").innerHTML =
+      `<table class="table table-bordered">
+        <thead class="table-warning"><tr><th>Name</th><th>Email</th><th>Company</th><th>Phone</th></tr></thead>
+        <tbody>${data.map(s=>`<tr><td>${s.name}</td><td>${s.email}</td><td>${s.company}</td><td>${s.phone}</td></tr>`).join("")}</tbody>
+      </table>`;
+  } catch {}
+}
+
+async function loadBAs() {
+  try {
+    const res = await fetch("backend/getbas.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const json = await res.json();
+    const d = json.data || [];
+    document.getElementById("baContainer").innerHTML =
+      `<table class="table table-bordered">
+        <thead class="table-success"><tr><th>Name</th><th>ID</th><th>Phone</th><th>Supplier</th></tr></thead>
+        <tbody>${d.map(b=>`<tr><td>${b.name}</td><td>${b.idNumber}</td><td>${b.phoneNumber}</td><td>${b.supplierEmail}</td></tr>`).join("")}</tbody>
+      </table>`;
+  } catch {}
+}
+
+async function loadStores() {
+  try {
+    const res = await fetch("backend/getstores.php");
+    const json = await res.json();
+    const stores = json.data || [];
+    document.getElementById("storesContainer").innerHTML =
+      `<table class="table table-bordered">
+        <thead class="table-info"><tr><th>Store</th><th>Region</th></tr></thead>
+        <tbody>${stores.map(s=>`<tr><td>${s.storeName}</td><td>${s.region}</td></tr>`).join("")}</tbody>
+      </table>`;
+  } catch {}
+}
+
+/* ------------------------- CALENDAR ------------------------- */
+async function loadAdminCalendar() {
+  try {
+    const res = await fetch("backend/calendaractivations.php");
+    const data = await res.json();
+    const events = (Array.isArray(data) ? data : [])
+      .filter(a => ["pending","approved"].includes(a.status))
+      .map(a => ({
+        id: a.id,
+        title: `${a.productName} - ${a.storeName} (${a.no_of_BAs || a.numOfBAs || 0} BA)`,
+        start: a.activationDate || a.bookingDate,
+        backgroundColor: a.status === "pending" ? "#F6A800" : "#4BB300",
+        borderColor: "#333",
+        textColor: "#fff"
+      }));
+
+    const calEl = document.getElementById("calendar");
+    calEl.innerHTML = "";
+    const calendar = new FullCalendar.Calendar(calEl, {
+      initialView: "dayGridMonth",
+      headerToolbar: { left: "prev,next today", center: "title", right: "dayGridMonth,timeGridWeek,timeGridDay" },
+      events
+    });
+    calendar.render();
+  } catch {}
+}
+
+/* ------------------------- BOOTSTRAP LOAD ------------------------- */
+async function loadData() {
+  await Promise.all([
+    loadPendingActivations(),
+    loadReviewed(),
+    loadSuppliers(),
+    loadBAs(),
+    loadStores()
+  ]);
+  loadAdminCalendar();
 }
 
 loadData();

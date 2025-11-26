@@ -4,112 +4,105 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Profile | Naivas Portal</title>
-<link rel="stylesheet" href="style.css">
-
 <style>
 body {
-  margin: 0;
+  margin:0;
   font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f6f8;
+  background:#f4f6f8;
 }
-
 .container {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 15px;
+  max-width:1000px;
+  margin:30px auto;
+  padding:15px;
 }
-
 h2 {
-  color: #f58220;
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 600;
+  color:#f58220;
+  text-align:center;
+  margin-bottom:25px;
+  font-weight:600;
 }
-
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.09);
-  margin-bottom: 25px;
+  background:#fff;
+  border-radius:12px;
+  padding:25px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.09);
+  margin-bottom:25px;
 }
-
 .card h3 {
-  color: #4bb300;
-  margin-bottom: 12px;
-  font-size: 20px;
+  color:#4bb300;
+  margin-bottom:12px;
+  font-size:20px;
 }
-
 .account-details {
-  display: flex;
-  gap: 25px;
-  align-items: center;
+  display:flex;
+  gap:25px;
+  align-items:center;
 }
-
 .avatar-container img {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #f58220;
-  cursor: pointer;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #f58220;
+  cursor:pointer;
 }
-
-.avatar-container input { display: none; }
-
+.avatar-container input { display:none; }
 .account-info p {
-  margin: 6px 0;
-  font-size: 15px;
+  margin:6px 0;
+  font-size:15px;
 }
-
-.form-group { margin-bottom: 10px; }
-
-label { font-weight: 600; font-size: 14px; }
-
+.form-group { margin-bottom:10px; }
+label { font-weight:600; font-size:14px; }
 input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #bbb;
-  border-radius: 6px;
-  margin-top: 3px;
+  width:100%;
+  padding:8px;
+  border:1px solid #bbb;
+  border-radius:6px;
+  margin-top:3px;
 }
-
 button {
-  padding: 11px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 10px;
-  transition: .25s;
+  padding:11px 18px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:10px;
+  transition:.25s;
 }
-
-.save-btn { background: #4bb300; color: #fff; }
-.save-btn:hover { background: #3b9200; }
-
-.delete-btn { background: #e74c3c; color: white; }
-.delete-btn:hover { background: #c0392b; }
+.save-btn { background:#4bb300; color:#fff; }
+.save-btn:hover { background:#3b9200; }
+.delete-btn { background:#e74c3c; color:white; }
+.delete-btn:hover { background:#c0392b; }
 </style>
 </head>
 <body>
 
+<!-- NAVBAR -->
 <div id="navbar-placeholder"></div>
 
 <script>
-// Load navbar first, apply avatar & name
 fetch("navbar.html")
-  .then(res => res.text())
-  .then(html => {
+  .then(res=>res.text())
+  .then(html=>{
     document.getElementById("navbar-placeholder").innerHTML = html;
-
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (user) {
-      if (document.getElementById("profileName"))
-        document.getElementById("profileName").textContent = user.SupplierName;
-      if (document.getElementById("profilePic") && user.profilePic)
-        document.getElementById("profilePic").src = user.profilePic;
+    const nameEl = document.getElementById("profileName");
+    const picEl = document.getElementById("profilePic");
+
+    if(user){
+      nameEl.textContent = user.SupplierName || "User";
+      if(user.profilePic) picEl.src = user.profilePic;
     }
-  });
+
+    const dropdown = document.querySelector(".profile-dropdown");
+    const trigger = document.querySelector(".profile-trigger");
+    const logoutLink = document.getElementById("logoutLink");
+
+    trigger.addEventListener("click", () => dropdown.classList.toggle("active"));
+    window.addEventListener("click", (e) => { if(!dropdown.contains(e.target)) dropdown.classList.remove("active"); });
+    logoutLink.addEventListener("click", (e) => { e.preventDefault(); localStorage.clear(); window.location.href="signin.html"; });
+  })
+  .catch(err=>console.error("Error loading navbar:", err));
 </script>
 
 <div class="container">
@@ -120,10 +113,9 @@ fetch("navbar.html")
     <h3>Account Details</h3>
     <div class="account-details">
       <div class="avatar-container">
-        <img id="avatarImage" src="default-avatar.png">
+        <img id="avatarImage" src="images/default-user.png" alt="Avatar">
         <input type="file" id="avatarInput" accept="image/*">
       </div>
-
       <div class="account-info">
         <p><strong>Name:</strong> <span id="nameDisplay">-</span></p>
         <p><strong>Company:</strong> <span id="companyDisplay">-</span></p>
@@ -137,16 +129,8 @@ fetch("navbar.html")
   <div class="card">
     <h3>Update Profile</h3>
     <form id="profileForm">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="nameInput" required>
-      </div>
-
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="text" id="phoneInput" required>
-      </div>
-
+      <div class="form-group"><label>Name</label><input type="text" id="nameInput" required></div>
+      <div class="form-group"><label>Phone</label><input type="text" id="phoneInput" required></div>
       <button class="save-btn" type="submit">Save Changes</button>
     </form>
   </div>
@@ -155,21 +139,9 @@ fetch("navbar.html")
   <div class="card">
     <h3>Reset Password</h3>
     <form id="resetPasswordForm">
-      <div class="form-group">
-        <label>Old Password</label>
-        <input type="password" id="oldPassword" required>
-      </div>
-
-      <div class="form-group">
-        <label>New Password</label>
-        <input type="password" id="newPassword" required>
-      </div>
-
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" id="confirmPassword" required>
-      </div>
-
+      <div class="form-group"><label>Old Password</label><input type="password" id="oldPassword" required></div>
+      <div class="form-group"><label>New Password</label><input type="password" id="newPassword" required></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" required></div>
       <button class="save-btn" type="submit">Update Password</button>
     </form>
   </div>
@@ -184,97 +156,94 @@ fetch("navbar.html")
 
 <script>
 const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if(!user){ window.location="signin.html"; }
 
-function loadProfile() {
+const nameDisplay=document.getElementById("nameDisplay");
+const emailDisplay=document.getElementById("emailDisplay");
+const phoneDisplay=document.getElementById("phoneDisplay");
+const companyDisplay=document.getElementById("companyDisplay");
+const avatarImage=document.getElementById("avatarImage");
+
+const nameInput=document.getElementById("nameInput");
+const phoneInput=document.getElementById("phoneInput");
+const profileForm=document.getElementById("profileForm");
+const avatarInput=document.getElementById("avatarInput");
+const resetPasswordForm=document.getElementById("resetPasswordForm");
+const oldPassword=document.getElementById("oldPassword");
+const newPassword=document.getElementById("newPassword");
+const confirmPassword=document.getElementById("confirmPassword");
+const deleteAccount=document.getElementById("deleteAccount");
+
+function loadProfile(){
   nameDisplay.textContent = user.SupplierName;
   emailDisplay.textContent = user.email;
-  phoneDisplay.textContent = user.phone;
-  companyDisplay.textContent = user.company;
-  avatarImage.src = user.profilePic || "default-avatar.png";
+  phoneDisplay.textContent = user.PhoneNumber || "-";
+  companyDisplay.textContent = user.CompanyName || "-";
+  avatarImage.src = user.profilePic || "images/default-user.png";
 
   nameInput.value = user.SupplierName;
-  phoneInput.value = user.phone;
+  phoneInput.value = user.PhoneNumber || "";
 }
 loadProfile();
 
 // Change Avatar
-avatarImage.onclick = () => avatarInput.click();
-avatarInput.onchange = async () => {
+avatarImage.onclick = ()=> avatarInput.click();
+avatarInput.onchange = async ()=>{
   const file = avatarInput.files[0];
-  if (!file) return;
+  if(!file) return;
 
   const formData = new FormData();
   formData.append("email", user.email);
   formData.append("avatar", file);
 
-  const r = await fetch("http://localhost/naivas_portal/backend/changeAvatar.php", { method: "POST", body: formData });
+  const r = await fetch("backend/changeAvatar.php",{method:"POST",body:formData});
   const res = await r.json();
 
-  if (res.success) {
-    avatarImage.src = res.avatarUrl;
+  if(res.success){
     user.profilePic = res.avatarUrl;
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
-    location.reload();
+    localStorage.setItem("loggedInUser",JSON.stringify(user));
+    location.reload(); // navbar will reflect new avatar on reload
   } else alert(res.message);
 };
 
 // Update Profile
-profileForm.onsubmit = async e => {
+profileForm.onsubmit = async e=>{
   e.preventDefault();
-  const data = {
-    email: user.email,
-    name: nameInput.value,
-    phone: phoneInput.value
-  };
+  const data = {email:user.email,name:nameInput.value,phone:phoneInput.value};
 
-  const r = await fetch("http://localhost/naivas_portal/backend/updateProfile.php", {
-    method: "POST", headers: { "Content-Type":"application/json" },
-    body: JSON.stringify(data)
-  });
-
+  const r = await fetch("backend/updateProfile.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
   const res = await r.json();
-  if (res.success) {
+
+  if(res.success){
     user.SupplierName = data.name;
-    user.phone = data.phone;
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    user.PhoneNumber = data.phone;
+    localStorage.setItem("loggedInUser",JSON.stringify(user));
     alert("Profile updated!");
     loadProfile();
   } else alert(res.message);
 };
 
 // Reset Password
-resetPasswordForm.onsubmit = async e => {
+resetPasswordForm.onsubmit = async e=>{
   e.preventDefault();
-  if (newPassword.value !== confirmPassword.value) return alert("Passwords do not match!");
+  if(newPassword.value!==confirmPassword.value) return alert("Passwords do not match!");
 
-  const body = {
-    email: user.email,
-    oldPassword: oldPassword.value,
-    newPassword: newPassword.value
-  };
-
-  const r = await fetch("http://localhost/naivas_portal/backend/resetPassword.php", {
-    method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(body)
-  });
-
+  const r = await fetch("backend/resetPassword.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:user.email,oldPassword:oldPassword.value,newPassword:newPassword.value})});
   const res = await r.json();
   alert(res.message);
 };
 
 // Delete Account
-deleteAccount.onclick = async () => {
-  if (!confirm("Delete your account permanently?")) return;
+deleteAccount.onclick = async ()=>{
+  if(!confirm("Delete your account permanently?")) return;
 
-  const r = await fetch("http://localhost/naivas_portal/backend/deleteAccount.php", {
-    method:"POST", headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({ email: user.email })
-  });
+  const r = await fetch("backend/deleteAccount.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:user.email})});
   const res = await r.json();
 
-  if (res.success) {
+  if(res.success){
     localStorage.clear();
     alert("Account deleted.");
-    location.href = "signin.html";
+    location.href="signin.html";
   } else alert(res.message);
 };
 </script>

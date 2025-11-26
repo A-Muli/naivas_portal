@@ -110,50 +110,58 @@
     </form>
   </div>
 
-  <script>
-    const form = document.getElementById("signinForm");
+<script>
+  const form = document.getElementById("signinForm");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const data = {
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value
-      };
+    const data = {
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value
+    };
 
-      try {
-        const res = await fetch("http://localhost/naivas_portal/backend/signin.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
+    try {
+      const res = await fetch("http://localhost/naivas_portal/backend/signin.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
 
-        const result = await res.json();
+      const result = await res.json();
 
-        if (!res.ok) throw new Error(result.message);
-
-        if (result.success) {
-          alert(result.message);
-
-          // ✅ Save user info in local storage
-          localStorage.setItem("loggedInUser", JSON.stringify(result.user));
-
-          // ✅ Redirect based on role
-          if (result.user.role === "admin") {
-            window.location.href = "admin.html";
-          } else {
-            window.location.href = "index.html";
-          }
-        } else {
-          alert(result.message);
-        }
-
-      } catch (err) {
-        alert("Error: " + err.message);
-        console.error(err);
+      if (!result.success) {
+        alert(result.message);
+        return;
       }
-    });
-  </script>
+
+      alert(result.message);
+
+      // ✅ Save user in browser
+      localStorage.setItem("loggedInUser", JSON.stringify(result.user));
+
+      // ✅ Redirect based on role
+      switch (result.user.role) {
+        case "admin":
+          window.location.href = "admin.html";
+          break;
+        case "manager":
+          window.location.href = "manager.html";
+          break;
+        case "operations":
+          window.location.href = "ops.html";
+          break;
+        default:
+          window.location.href = "index.html"; // supplier
+      }
+
+    } catch (err) {
+      alert("Error: " + err.message);
+      console.error(err);
+    }
+  });
+</script>
+
 
 </body>
 </html>

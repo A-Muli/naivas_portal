@@ -1,122 +1,114 @@
 <?php
+// ----------------------
+// CORS FIX (MUST BE FIRST)
+// ----------------------
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
+// Handle preflight request (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+// ----------------------
+// END CORS FIX
+// ----------------------
+
+include("db_connect.php"); 
+
 try {
-    include("db_connect.php");
+    // --- 1. HANDLE POST REQUEST (SAVE BOOKING) ---
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Read JSON data from the request body
+        $json_data = file_get_contents("php://input");
+        $data = json_decode($json_data, true);
 
-    $data = json_decode(file_get_contents("php://input"), true);
-    if (!$data) throw new Exception("Invalid data received.");
+        // Basic validation
+        if (empty($data) || !isset($data['supplierEmail'], $data['stores'], $data['productCategory'], $data['activationDate'], $data['brandAmbassadors'])) {
+            throw new Exception("Invalid or incomplete data received.");
+        }
 
-    $supplierEmail   = $data["supplierEmail"] ?? '';
-    $storeName       = $data["storeName"] ?? '';
-    $productCategory = $data["productCategory"] ?? '';
-    $productType     = $data["productType"] ?? '';
-    $productName     = $data["productName"] ?? '';
-    $activationDate  = $data["activationDate"] ?? '';
-    $brandAmbassadors = $data["brandAmbassadors"] ?? [];
+        // Extract main booking data
+        $supplierEmail = $data['supplierEmail'];
+        $productCategory = $data['productCategory'];
+        $productType = $data['productType'] ?? ''; 
+        $productName = $data['productName'] ?? ''; 
+        $activationDate = $data['activationDate'];
+        $noOfBAs = count($data['brandAmbassadors']);
+        $storesList = $data['stores']; // Array of store names
+        $brandAmbassadors = $data['brandAmbassadors']; // Array of BA objects
 
-    if (!$supplierEmail || !$storeName || !$productCategory || !$productType || !$productName || !$activationDate) {
-        throw new Exception("All booking fields are required.");
-    }
+        // Start Transaction
+        $conn->begin_transaction();
 
-    // ✅ 1. Check max BAs allowed for store
-    $stmtStore = $conn->prepare("SELECT MaxBas, current_bas FROM stores WHERE storeName = ?");
-    $stmtStore->bind_param("s", $storeName);
-    $stmtStore->execute();
-    $resultStore = $stmtStore->get_result();
-    
-    if ($resultStore->num_rows === 0) throw new Exception("Store not found.");
-    
-    $storeData = $resultStore->fetch_assoc();
-    $maxBas = (int)$storeData["MaxBas"];
-    $currentBas = (int)$storeData["current_bas"];
+        // --- 1.1 Insert into `bookings` table ---
+        // Set storeName to 'Multiple Stores' or the first store name for summary purposes.
+        $mainStoreName = (count($storesList) > 1) ? 'Multiple Stores' : ($storesList[0] ?? 'N/A');
 
-    // ❌ Store does not accept BAs
-    if ($maxBas == 0) throw new Exception("This store does not accept BAs.");
+        $stmt = $conn->prepare("INSERT INTO bookings (supplierEmail, storeName, productCategory, productType, productName, activationDate, no_of_BAs, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')");
+        $stmt->bind_param("ssssssi", $supplierEmail, $mainStoreName, $productCategory, $productType, $productName, $activationDate, $noOfBAs);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error inserting main booking: " . $stmt->error);
+        }
 
-    // ✅ Calculate new BA count
-    $newBAs = count($brandAmbassadors);
+        $bookingId = $conn->insert_id;
+        $stmt->close();
+        
+        // --- 1.2 Insert into `bookings_stores` Junction Table (NEW LOGIC) ---
+        // This is the junction table for the many-to-many relationship.
+        $stmtStores = $conn->prepare("INSERT INTO bookings_stores (booking_id, storeName) VALUES (?, ?)");
+        foreach ($storesList as $storeName) {
+            $stmtStores->bind_param("is", $bookingId, $storeName);
+            if (!$stmtStores->execute()) {
+                throw new Exception("Error inserting store link into junction table: " . $stmtStores->error);
+            }
+        }
+        $stmtStores->close();
 
-    // ✅ 2. Count BAs already approved or pending
-    $stmtCount = $conn->prepare("
-        SELECT SUM(no_of_BAs) AS totalBAs 
-        FROM bookings 
-        WHERE storeName = ? AND activationDate = ? 
-        AND (status = 'approved' OR status = 'pending')
-    ");
-    $stmtCount->bind_param("ss", $storeName, $activationDate);
-    $stmtCount->execute();
-    $totalBAs = (int)$stmtCount->get_result()->fetch_assoc()["totalBAs"];
-
-    if ($totalBAs + $newBAs > $maxBas) {
-        throw new Exception("Store capacity reached! No more BAs allowed for this date.");
-    }
-
-    // ✅ 3. Prevent duplicate booking (same supplier, same store, same date)
-    $stmtDup = $conn->prepare("
-        SELECT id FROM bookings 
-        WHERE supplierEmail = ? AND storeName = ? AND activationDate = ?
-    ");
-    $stmtDup->bind_param("sss", $supplierEmail, $storeName, $activationDate);
-    $stmtDup->execute();
-
-    if ($stmtDup->get_result()->num_rows > 0) {
-        throw new Exception("You already booked this store for that date.");
-    }
-
-    // ✅ 4. Insert booking with PENDING status
-    $status = "pending";
-    $stmtBooking = $conn->prepare("
-        INSERT INTO bookings 
-        (supplierEmail, storeName, productCategory, productType, productName, activationDate, no_of_BAs, status) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ");
-    $no_of_BAs = $newBAs;
-    $stmtBooking->bind_param("ssssssis", 
-        $supplierEmail, $storeName, $productCategory, $productType, 
-        $productName, $activationDate, $no_of_BAs, $status
-    );
-    $stmtBooking->execute();
-
-    $bookingId = $stmtBooking->insert_id;
-
-    // ✅ 5. Insert Brand Ambassadors for booking
-    if ($newBAs > 0) {
-        $stmtBA = $conn->prepare("
-            INSERT INTO brand_ambassadors (booking_id, name, idNumber, phoneNumber)
-            VALUES (?, ?, ?, ?)
-        ");
-
+        // --- 1.3 Insert into `brand_ambassadors` table ---
+        $stmtBA = $conn->prepare("INSERT INTO brand_ambassadors (booking_id, name, idNumber, phoneNumber, storeAssigned) VALUES (?, ?, ?, ?, ?)");
         foreach ($brandAmbassadors as $ba) {
-            $name = $ba["name"] ?? '';
-            $idNumber = $ba["idNumber"] ?? '';
-            $phone = $ba["phoneNumber"] ?? '';
-
-            if (!$name || !$idNumber || !$phone) continue;
-
-            $stmtBA->bind_param("isss", $bookingId, $name, $idNumber, $phone);
-            $stmtBA->execute();
+            $stmtBA->bind_param("issss", $bookingId, $ba['name'], $ba['idNumber'], $ba['phoneNumber'], $ba['storeAssigned']);
+            if (!$stmtBA->execute()) {
+                throw new Exception("Error inserting Brand Ambassador: " . $stmtBA->error);
+            }
         }
         $stmtBA->close();
-    }
 
-    echo json_encode([
-        "success" => true,
-        "message" => "Booking submitted and pending approval!"
-    ]);
+        // Commit transaction
+        $conn->commit();
+        
+        // Success response
+        echo json_encode([
+            "success" => true,
+            "message" => "Booking submitted successfully! ID: " . $bookingId
+        ]);
+        
+        // CRITICAL FIX: Ensure the script terminates here.
+        exit(); 
+    } 
+
+    // Handle non-POST requests explicitly (e.g., unauthorized access)
+    http_response_code(405);
+    echo json_encode(["success" => false, "message" => "Method not allowed. Only POST is accepted."]);
+    exit();
+
 
 } catch (Exception $e) {
+    if (isset($conn) && $conn->in_transaction) $conn->rollback();
+    // Close statements and connection only if they were opened
+    if (isset($stmt) && $stmt) $stmt->close();
+    if (isset($stmtStores) && $stmtStores) $stmtStores->close();
+    if (isset($stmtBA) && $stmtBA) $stmtBA->close();
+    if (isset($conn) && $conn) $conn->close();
+    
+    http_response_code(500); 
     echo json_encode([
         "success" => false,
-        "message" => $e->getMessage()
+        "message" => "Server Error: " . $e->getMessage()
     ]);
 }
-
-// Cleanup
-if (isset($stmtStore)) $stmtStore->close();
-if (isset($stmtCount)) $stmtCount->close();
-if (isset($stmtDup)) $stmtDup->close();
-if (isset($stmtBooking)) $stmtBooking->close();
-$conn->close();
 ?>

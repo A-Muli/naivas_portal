@@ -19,6 +19,7 @@ try {
     $company = $data["CompanyName"] ?? '';
     $phone = $data["PhoneNumber"] ?? '';
     $password = $data["password"] ?? '';
+    $role = "supplier"; // ✅ Default role
 
     if (!$name || !$email || !$company || !$phone || !$password) {
         throw new Exception("All fields are required.");
@@ -27,17 +28,17 @@ try {
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // ✅ Fixed: correct number of placeholders (5)
+    // ✅ INSERT with role column
     $stmt = $conn->prepare("
-        INSERT INTO suppliers (SupplierName, email, CompanyName, PhoneNumber, password)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO suppliers (SupplierName, email, CompanyName, PhoneNumber, password, role)
+        VALUES (?, ?, ?, ?, ?, ?)
     ");
 
     if (!$stmt) {
         throw new Exception("Database prepare failed: " . $conn->error);
     }
 
-    $stmt->bind_param("sssss", $name, $email, $company, $phone, $hashedPassword);
+    $stmt->bind_param("ssssss", $name, $email, $company, $phone, $hashedPassword, $role);
 
     if (!$stmt->execute()) {
         throw new Exception("Error saving supplier: " . $stmt->error);

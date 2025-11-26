@@ -3,41 +3,40 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 include("db_connect.php");
 
-if (!isset($_POST['email']) || !isset($_FILES['avatar'])) {
-    echo json_encode(['success' => false, 'message' => 'Email or avatar missing']);
+if(!isset($_POST['email']) || !isset($_FILES['avatar'])){
+    echo json_encode(["success"=>false,"message"=>"Email or avatar missing"]);
     exit;
 }
 
 $email = $_POST['email'];
 $avatar = $_FILES['avatar'];
 
-// Validate file type
-$allowed = ['jpg','jpeg','png','gif'];
-$ext = strtolower(pathinfo($avatar['name'], PATHINFO_EXTENSION));
+$allowed = ["jpg","jpeg","png","gif"];
+$ext = strtolower(pathinfo($avatar["name"], PATHINFO_EXTENSION));
 
-if (!in_array($ext, $allowed)) {
-    echo json_encode(['success'=>false, 'message'=>'Invalid file type']);
+if(!in_array($ext, $allowed)){
+    echo json_encode(["success"=>false,"message"=>"Invalid file type"]);
     exit;
 }
 
-// Save file
-$targetDir = "uploads/avatars/";
-if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
+$targetDir = "../uploads/avatars/"; // ✅ correct folder path from backend
+if(!is_dir($targetDir)) mkdir($targetDir, 0777, true);
 
 $filename = uniqid() . "." . $ext;
 $targetFile = $targetDir . $filename;
 
-if (move_uploaded_file($avatar['tmp_name'], $targetFile)) {
-    $stmt = $conn->prepare("UPDATE users SET profilePic=? WHERE email=?");
-    $stmt->bind_param("ss", $targetFile, $email);
-    if ($stmt->execute()) {
-        echo json_encode(['success'=>true, 'avatarUrl'=>$targetFile]);
-    } else {
-        echo json_encode(['success'=>false, 'message'=>'DB update failed']);
-    }
+if(move_uploaded_file($avatar["tmp_name"], $targetFile)){
+
+    $dbPath = "uploads/avatars/" . $filename; // ✅ what is stored in DB
+
+    $stmt = $conn->prepare("UPDATE suppliers SET profilePic=? WHERE email=?");
+    $stmt->bind_param("ss", $dbPath, $email);
+    $stmt->execute();
     $stmt->close();
+
+    echo json_encode(["success"=>true,"avatarUrl"=>$dbPath]);
 } else {
-    echo json_encode(['success'=>false, 'message'=>'Failed to upload file']);
+    echo json_encode(["success"=>false,"message"=>"Failed to upload file"]);
 }
 
 $conn->close();
